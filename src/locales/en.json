@@ -1,0 +1,166 @@
+{
+  "Index": {
+    "meta_title": "Portuguese Visa Applications - Expert assistance for digital nomads, families, and businesses",
+    "meta_description": "Streamlined Portuguese visa application service with a money-back guarantee. Perfect for remote workers, families, and businesses relocating to Portugal."
+  },
+  "Navbar": {
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "product": "Services",
+    "docs": "Process",
+    "blog": "Blog",
+    "community": "Community",
+    "company": "Company"
+  },
+  "Hero": {
+    "follow_twitter": "Follow us for updates",
+    "title": "Get your <important>Portuguese Visa</important> with confidence",
+    "description": "If you're a remote worker, freelancer, business owner, or part of a family planning to relocate, we'll take care of your entire visa application process for just €1,100 per applicant—with a money-back guarantee.",
+    "primary_button": "Start Your Application",
+    "secondary_button": "Learn More"
+  },
+  "Sponsors": {
+    "title": "Trusted By"
+  },
+  "Features": {
+    "section_subtitle": "Our Process",
+    "section_title": "Navigating Portuguese Bureaucracy Made Simple",
+    "section_description": "Dealing with visa applications can be overwhelming, but we make it simple. Let us navigate the complexities, so you can focus on what truly matters—your move to Portugal.",
+    "feature1_title": "Document Review",
+    "feature2_title": "Application Support",
+    "feature3_title": "Translation Services",
+    "feature4_title": "Legal Guidance",
+    "feature5_title": "Fast Processing",
+    "feature6_title": "Guaranteed Success",
+    "feature_description": "Our comprehensive visa application service ensures a smooth transition to your new life in Portugal."
+  },
+  "Pricing": {
+    "section_subtitle": "Simple Pricing",
+    "section_title": "Transparent Fees, Guaranteed Results",
+    "section_description": "Choose the visa type that best suits your situation. All packages include our money-back guarantee.",
+    "button_text": "Apply Now"
+  },
+  "PricingPlan": {
+    "free_plan_name": "D7 - Passive Income",
+    "premium_plan_name": "D2 - Entrepreneur",
+    "enterprise_plan_name": "D8 - Digital Nomad",
+    "free_plan_description": "For retirees & investors",
+    "premium_plan_description": "For business owners",
+    "enterprise_plan_description": "For remote workers",
+    "feature_team_member": "Up to {number} Family Members",
+    "feature_website": "{number} Year Validity",
+    "feature_storage": "Document Storage",
+    "feature_transfer": "Translation Services",
+    "feature_email_support": "24/7 Support",
+    "plan_interval_month": "month",
+    "plan_interval_year": "year",
+    "next_renew_date": "Your visa expires on {date}"
+  },
+  "FAQ": {
+    "question": "What documents do I need for a Portuguese visa?",
+    "answer": "Required documents vary by visa type but typically include: valid passport, proof of income, criminal record check, health insurance, and proof of accommodation in Portugal. Our team will provide a detailed checklist based on your specific situation."
+  },
+  "CTA": {
+    "title": "Ready to Move to Portugal?",
+    "description": "Join thousands of successful applicants who have trusted us with their Portuguese visa process.",
+    "button_text": "Start Your Journey"
+  },
+  "Footer": {
+    "product": "Services",
+    "docs": "Process",
+    "blog": "Blog",
+    "community": "Community",
+    "company": "Company",
+    "terms_of_service": "Terms Of Service",
+    "privacy_policy": "Privacy Policy",
+    "designed_by": "Designed by <author></author>."
+  },
+  "ProtectFallback": {
+    "not_enough_permission": "You do not have the permissions to perform this action"
+  },
+  "SignIn": {
+    "meta_title": "Sign in",
+    "meta_description": "Access your Portuguese visa application dashboard."
+  },
+  "SignUp": {
+    "meta_title": "Start Your Visa Application",
+    "meta_description": "Begin your journey to Portugal with our streamlined visa application process."
+  },
+  "DashboardLayout": {
+    "home": "Home",
+    "todos": "Tasks",
+    "members": "Family Members",
+    "billing": "Payments",
+    "settings": "Settings"
+  },
+  "Dashboard": {
+    "meta_title": "Visa Application Dashboard",
+    "meta_description": "Track and manage your Portuguese visa application process."
+  },
+  "DashboardIndex": {
+    "title_bar": "Application Status",
+    "title_bar_description": "Track your visa application progress",
+    "message_state_title": "Let's begin your journey",
+    "message_state_description": "Complete your profile and upload the required documents to start your visa application.",
+    "message_state_button": "Upload Documents",
+    "message_state_alternative": "Need help? Contact our <url>support team</url>."
+  },
+  "UserProfile": {
+    "title_bar": "Applicant Profile",
+    "title_bar_description": "Manage your visa application details"
+  },
+  "OrganizationProfile": {
+    "title_bar": "Family Management",
+    "title_bar_description": "Manage family member applications"
+  },
+  "Billing": {
+    "title_bar": "Payment",
+    "title_bar_description": "Manage your visa application payments",
+    "current_section_title": "Application Fee",
+    "current_section_description": "Review your payment details and transaction history",
+    "manage_subscription_button": "View Payments"
+  },
+  "BillingOptions": {
+    "current_plan": "Selected Visa",
+    "upgrade_plan": "Apply Now"
+  },
+  "CheckoutConfirmation": {
+    "title_bar": "Payment Confirmation",
+    "message_state_title": "Payment successful",
+    "message_state_description": "Your payment has been processed. We'll begin processing your visa application right away.",
+    "message_state_button": "View Application Status"
+  },
+  "DataTable": {
+    "no_results": "No results."
+  },
+  "Todos": {
+    "title_bar": "Required Documents",
+    "title_bar_description": "Track your document submission progress",
+    "add_todo_button": "Add Document"
+  },
+  "TodoTableColumns": {
+    "open_menu": "Open menu",
+    "edit": "Edit",
+    "delete": "Delete",
+    "title_header": "Document",
+    "message_header": "Status",
+    "created_at_header": "Submitted at"
+  },
+  "AddTodo": {
+    "title_bar": "Upload Document",
+    "add_todo_section_title": "Submit a new document",
+    "add_todo_section_description": "Upload the required document for your visa application"
+  },
+  "EditTodo": {
+    "title_bar": "Edit document",
+    "edit_todo_section_title": "Update document",
+    "edit_todo_section_description": "Modify or replace the uploaded document"
+  },
+  "TodoForm": {
+    "title_label": "Document Type",
+    "title_description": "Select the type of document you're uploading.",
+    "message_title": "Notes",
+    "message_description": "Add any relevant notes about this document.",
+    "submit_button": "Upload"
+  }
+}
