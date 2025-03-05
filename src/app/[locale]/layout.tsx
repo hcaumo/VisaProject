@@ -4,10 +4,44 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
-import { DemoBadge } from '@/components/DemoBadge';
+// No import needed
 import { AllLocales } from '@/utils/AppConfig';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://drexfyvisa.com'),
+  title: {
+    default: 'Drexfy Visa – Your Gateway to a Digital Nomad Life in Portugal',
+    template: '%s | Drexfy Visa',
+  },
+  description: 'Simplified visas and relocation solutions for digital nomads, tech entrepreneurs, and creative professionals looking to move to Portugal.',
+  keywords: ['Portugal visa', 'digital nomad visa', 'entrepreneur visa', 'creative visa', 'Portugal relocation', 'visa application', 'Portugal immigration'],
+  authors: [{ name: 'Drexfy Visa Team' }],
+  creator: 'Drexfy Visa',
+  publisher: 'Drexfy Visa',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://drexfyvisa.com',
+    siteName: 'Drexfy Visa',
+    title: 'Drexfy Visa – Your Gateway to a Digital Nomad Life in Portugal',
+    description: 'Simplified visas and relocation solutions for digital nomads, tech entrepreneurs, and creative professionals looking to move to Portugal.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Drexfy Visa - Portugal Visa Services',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@drexfyvisa',
+    creator: '@drexfyvisa',
+    title: 'Drexfy Visa – Your Gateway to a Digital Nomad Life in Portugal',
+    description: 'Simplified visas and relocation solutions for digital nomads, tech entrepreneurs, and creative professionals looking to move to Portugal.',
+    images: ['/og-image.jpg'],
+  },
   icons: [
     {
       rel: 'apple-touch-icon',
@@ -30,6 +64,24 @@ export const metadata: Metadata = {
       url: '/favicon.ico',
     },
   ],
+  alternates: {
+    canonical: 'https://drexfyvisa.com',
+    languages: {
+      en: 'https://drexfyvisa.com/en',
+      pt: 'https://drexfyvisa.com/pt',
+      fr: 'https://drexfyvisa.com/fr',
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      'index': true,
+      'follow': true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export function generateStaticParams() {
@@ -59,8 +111,6 @@ export default function RootLayout(props: {
           messages={messages}
         >
           {props.children}
-
-          <DemoBadge />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,4 +1,7 @@
+'use client';
+
 import { GitHubLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { badgeVariants } from '@/components/ui/badgeVariants';
@@ -15,11 +18,12 @@ export const Hero = () => {
         banner={(
           <a
             className={badgeVariants()}
-            href="https://twitter.com/ixartz"
+            href="https://twitter.com/drexfyvisa"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Follow us on Twitter"
           >
-            <TwitterLogoIcon className="mr-1 size-5" />
+            <TwitterLogoIcon className="mr-1 size-5" aria-hidden="true" />
             {' '}
             {t('follow_twitter')}
           </a>
@@ -34,23 +38,66 @@ export const Hero = () => {
         description={t('description')}
         buttons={(
           <>
-            <a
+            <Link
               className={buttonVariants({ size: 'lg' })}
-              href="https://github.com/ixartz/SaaS-Boilerplate"
+              href="#schedule-call"
+              aria-label="Schedule a consultation call"
             >
               {t('primary_button')}
-            </a>
+            </Link>
 
-            <a
+            <Link
               className={buttonVariants({ variant: 'outline', size: 'lg' })}
-              href="https://github.com/ixartz/SaaS-Boilerplate"
+              href="/how-it-works"
+              aria-label="Learn how our visa process works"
             >
-              <GitHubLogoIcon className="mr-2 size-5" />
+              <GitHubLogoIcon className="mr-2 size-5" aria-hidden="true" />
               {t('secondary_button')}
-            </a>
+            </Link>
           </>
         )}
       />
+
+      {/* Quick Links Section */}
+      <div className="mt-12 text-center">
+        <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-4">
+          <Link
+            href="/digital-nomad-visa"
+            className="rounded-full bg-blue-100 px-4 py-2 text-sm text-blue-800 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800"
+            aria-label="Learn about Digital Nomad Visa"
+          >
+            Digital Nomad Visa
+          </Link>
+          <Link
+            href="/entrepreneur-visa"
+            className="rounded-full bg-green-100 px-4 py-2 text-sm text-green-800 transition-colors hover:bg-green-200 dark:bg-green-900 dark:text-green-200 dark:hover:bg-green-800"
+            aria-label="Learn about Entrepreneur Visa"
+          >
+            Entrepreneur Visa
+          </Link>
+          <Link
+            href="/creative-visa"
+            className="rounded-full bg-purple-100 px-4 py-2 text-sm text-purple-800 transition-colors hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-200 dark:hover:bg-purple-800"
+            aria-label="Learn about Creative Visa"
+          >
+            Creative Visa
+          </Link>
+          <Link
+            href="/how-it-works"
+            className="rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-800 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            aria-label="Learn how our visa process works"
+          >
+            How It Works
+          </Link>
+          <Link
+            href="/community"
+            className="rounded-full bg-yellow-100 px-4 py-2 text-sm text-yellow-800 transition-colors hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:hover:bg-yellow-800"
+            aria-label="Learn about our community"
+          >
+            Community
+          </Link>
+        </div>
+      </div>
     </Section>
   );
 };

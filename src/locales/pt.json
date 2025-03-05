@@ -1,0 +1,85 @@
+{
+  "Index": {
+    "meta_title": "Drexfy Visa – Seu Portal para uma Vida de Nômade Digital em Portugal",
+    "meta_description": "A Drexfy Visa combina ferramentas avançadas de IA com orientação jurídica especializada para tornar sua realocação para Portugal simples, eficiente e personalizada."
+  },
+  "Navbar": {
+    "sign_in": "Entrar",
+    "sign_up": "Cadastrar",
+    "product": "Serviços",
+    "docs": "Processo",
+    "blog": "Blog",
+    "community": "Comunidade",
+    "company": "Empresa"
+  },
+  "Hero": {
+    "follow_twitter": "Siga-nos para atualizações",
+    "title": "Abrace um <important>Novo Capítulo em Portugal</important>",
+    "description": "A Drexfy Visa combina ferramentas avançadas de IA com orientação jurídica especializada para tornar sua realocação para Portugal simples, eficiente e personalizada. Seja você um trabalhador remoto, empreendedor tecnológico ou profissional criativo, nós simplificamos o processo de visto.",
+    "primary_button": "Inicie Sua Jornada",
+    "secondary_button": "Saiba Mais"
+  },
+  "Sponsors": {
+    "title": "Parceiros de Confiança"
+  },
+  "Features": {
+    "section_subtitle": "Como Funciona",
+    "section_title": "Sua Jornada para Portugal Simplificada",
+    "section_description": "Transformamos o complexo processo de visto em uma experiência simples e transparente, permitindo que você se concentre no que realmente importa - seu futuro em Portugal.",
+    "feature1_title": "Onboarding Personalizado",
+    "feature2_title": "Gestão Inteligente de Documentos",
+    "feature3_title": "Orientação Passo a Passo",
+    "feature4_title": "Suporte Jurídico Especializado",
+    "feature5_title": "Networking e Comunidade",
+    "feature6_title": "Benefícios Exclusivos",
+    "feature1_description": "Inicie sua jornada preenchendo um formulário intuitivo com seus dados e preferências.",
+    "feature2_description": "Nosso sistema com tecnologia de IA organiza, traduz e verifica seus documentos em tempo real.",
+    "feature3_description": "Siga um processo claro com marcos definidos e atualizações constantes.",
+    "feature4_description": "Conte com profissionais jurídicos experientes em todas as etapas do processo.",
+    "feature5_description": "Faça parte de uma rede vibrante de nômades digitais e empreendedores.",
+    "feature6_description": "Aproveite descontos exclusivos em serviços essenciais para sua vida em Portugal."
+  },
+  "Pricing": {
+    "section_subtitle": "Planos Transparentes",
+    "section_title": "Escolha o Plano Ideal para Você",
+    "section_description": "Oferecemos soluções personalizadas para diferentes perfis de vistos, todos com nossa garantia de satisfação.",
+    "button_text": "Começar Agora"
+  },
+  "PricingPlan": {
+    "free_plan_name": "D7 - Renda Passiva",
+    "premium_plan_name": "D2 - Empreendedor",
+    "enterprise_plan_name": "D8 - Nômade Digital",
+    "free_plan_description": "Para aposentados e investidores",
+    "premium_plan_description": "Para empresários",
+    "enterprise_plan_description": "Para trabalhadores remotos",
+    "feature_team_member": "Até {number} Membros Familiares",
+    "feature_website": "Validade de {number} Ano",
+    "feature_storage": "Armazenamento de Documentos",
+    "feature_transfer": "Serviços de Tradução",
+    "feature_email_support": "Suporte 24/7",
+    "plan_interval_month": "mês",
+    "plan_interval_year": "ano",
+    "next_renew_date": "Seu visto expira em {date}"
+  },
+  "FAQ": {
+    "section_title": "Perguntas Frequentes",
+    "section_description": "Tire suas dúvidas sobre o processo de visto para Portugal",
+    "question1": "Quais documentos são necessários para o visto?",
+    "answer1": "Os documentos variam por tipo de visto, mas geralmente incluem: passaporte válido, comprovante de renda, antecedentes criminais, seguro saúde e comprovante de acomodação em Portugal. Nossa equipe fornecerá uma lista detalhada baseada na sua situação específica."
+  },
+  "CTA": {
+    "title": "Pronto para Começar sua Vida em Portugal?",
+    "description": "Junte-se a milhares de pessoas que já realizaram seu sonho de viver em Portugal com nossa ajuda.",
+    "button_text": "Inicie Sua Jornada"
+  },
+  "Footer": {
+    "product": "Serviços",
+    "docs": "Processo",
+    "blog": "Blog",
+    "community": "Comunidade",
+    "company": "Empresa",
+    "terms_of_service": "Termos de Serviço",
+    "privacy_policy": "Política de Privacidade",
+    "designed_by": "Desenvolvido por <author></author>."
+  }
+}

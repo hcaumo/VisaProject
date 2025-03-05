@@ -5,15 +5,19 @@ import { BILLING_INTERVAL, type PricingPlan } from '@/types/Subscription';
 const localePrefix: LocalePrefix = 'as-needed';
 
 export const AppConfig = {
-  name: 'Portuguese Visa Applications',
+  name: 'Drexfy Visa',
   locales: [
+    {
+      id: 'pt',
+      name: 'Português',
+    },
     {
       id: 'en',
       name: 'English',
     },
     { id: 'fr', name: 'Français' },
   ],
-  defaultLocale: 'en',
+  defaultLocale: 'pt',
   localePrefix,
 };
 
