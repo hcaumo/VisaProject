@@ -24,7 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { VisaApplicationService } from "@/features/visa/VisaApplicationService";
 import {
+  ApplicationStatus,
   VisaApplication,
   VisaType,
   defaultVisaApplication,
@@ -41,16 +43,20 @@ enum ApplicationStep {
   REVIEW = 4,
 }
 
-export const VisaApplicationForm = () => {
+interface VisaApplicationFormProps {
+  existingApplication?: VisaApplication;
+}
+
+export const VisaApplicationForm = ({ existingApplication }: VisaApplicationFormProps) => {
   const t = useTranslations("VisaApplication");
   const [currentStep, setCurrentStep] = useState<ApplicationStep>(
     ApplicationStep.VISA_TYPE_SELECTION
   );
 
-  // Initialize form with default values
+  // Initialize form with default values or existing application
   const form = useForm<VisaApplication>({
     resolver: zodResolver(visaApplicationSchema),
-    defaultValues: defaultVisaApplication,
+    defaultValues: existingApplication || defaultVisaApplication,
   });
 
   // Set up field array for applicants
@@ -79,10 +85,31 @@ export const VisaApplicationForm = () => {
     }
   }, [applicantCount, applicantFields.length, append, remove]);
 
-  const onSubmit = (data: VisaApplication) => {
-    console.log("Form submitted:", data);
-    // Here you would typically send the data to your backend
-    alert("Application submitted successfully!");
+  const onSubmit = async (data: VisaApplication) => {
+    try {
+      if (existingApplication?.id) {
+        // Update existing application
+        await VisaApplicationService.updateApplication(existingApplication.id, data);
+        // Submit if it's a draft
+        if (existingApplication.status === ApplicationStatus.DRAFT) {
+          await VisaApplicationService.submitApplication(existingApplication.id);
+        }
+      } else {
+        // Create new application
+        const newApp = await VisaApplicationService.createApplication(data);
+        // Submit the application
+        if (newApp.id) {
+          await VisaApplicationService.submitApplication(newApp.id);
+        }
+      }
+      
+      alert(t("application_submitted_successfully"));
+      // Redirect to dashboard
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      alert(t("application_submission_error"));
+    }
   };
 
   const nextStep = () => {

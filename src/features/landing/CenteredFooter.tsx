@@ -25,16 +25,6 @@ export const CenteredFooter = (props: {
       <div className="mt-6 flex w-full items-center justify-between gap-y-2 border-t pt-3 text-sm text-muted-foreground max-md:flex-col">
         <div>
           {`© Copyright ${new Date().getFullYear()} ${props.name}. `}
-          {t.rich('designed_by', {
-            author: () => (
-              <a
-                className="text-blue-500 hover:text-blue-600"
-                href="https://creativedesignsguru.com"
-              >
-                Creative Designs Guru
-              </a>
-            ),
-          })}
           {/*
            * PLEASE READ THIS SECTION
            * I'm an indie maker with limited resources and funds, I'll really appreciate if you could have a link to my website.

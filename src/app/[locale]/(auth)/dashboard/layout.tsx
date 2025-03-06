@@ -29,16 +29,8 @@ export default function DashboardLayout(props: { children: React.ReactNode }) {
                 label: t('application_status'),
               },
               {
-                href: '/dashboard/documents',
-                label: t('my_documents'),
-              },
-              {
                 href: '/dashboard/appointments',
                 label: t('appointments'),
-              },
-              {
-                href: '/dashboard/user-profile',
-                label: t('settings'),
               },
             ]}
           />

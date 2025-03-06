@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 import { TitleBar } from '@/features/dashboard/TitleBar';
-import { VisaApplicationForm } from '@/features/visa/VisaApplicationForm';
+import { ApplicationStatus } from '@/features/visa/ApplicationStatus';
 
 const DashboardIndexPage = () => {
   const t = useTranslations('DashboardIndex');
@@ -14,7 +14,7 @@ const DashboardIndexPage = () => {
       />
 
       <div className="mt-6">
-        <VisaApplicationForm />
+        <ApplicationStatus />
       </div>
     </>
   );

@@ -9,6 +9,16 @@ export enum VisaType {
   FAMILY = "family",
 }
 
+// Application status
+export enum ApplicationStatus {
+  DRAFT = "draft",
+  STARTED = "started",
+  PENDING = "pending",
+  COMPLETED = "completed",
+  APPROVED = "approved",
+  DENIED = "denied",
+}
+
 // Applicant schema for personal information
 export const applicantSchema = z.object({
   // Personal Information
@@ -30,6 +40,12 @@ export type Applicant = z.infer<typeof applicantSchema>;
 
 // Visa application schema
 export const visaApplicationSchema = z.object({
+  // Metadata
+  id: z.string().optional(),
+  status: z.nativeEnum(ApplicationStatus).default(ApplicationStatus.DRAFT),
+  createdAt: z.date().optional().default(() => new Date()),
+  updatedAt: z.date().optional().default(() => new Date()),
+  
   // Step 1: Basic Information
   visaType: z.nativeEnum(VisaType, {
     required_error: "Please select a visa type",
@@ -79,4 +95,7 @@ export const defaultVisaApplication: Partial<VisaApplication> = {
   visaType: VisaType.TOURIST,
   applicantCount: 1,
   applicants: [{ ...emptyApplicant }],
+  status: ApplicationStatus.DRAFT,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
