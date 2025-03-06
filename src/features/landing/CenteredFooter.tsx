@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl';
 import React from 'react';
 
 export const CenteredFooter = (props: {
@@ -8,7 +7,6 @@ export const CenteredFooter = (props: {
   legalLinks: React.ReactNode;
   children: React.ReactNode;
 }) => {
-  const t = useTranslations('Footer');
 
   return (
     <div className="flex flex-col items-center text-center">
