@@ -39,12 +39,14 @@ export default withSentryConfig(
                   default-src 'self';
                   script-src 'self' 'unsafe-eval' 'unsafe-inline'
                     https://js.stripe.com https://checkout.stripe.com https://m.stripe.network
-                    https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com;
+                    https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com
+                    https://challenges.cloudflare.com;
                   worker-src 'self' blob:;
                   frame-src 'self' https://js.stripe.com https://checkout.stripe.com https://hooks.stripe.com
-                    https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com;
+                    https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com
+                    https://challenges.cloudflare.com;
                   connect-src 'self' https://api.stripe.com https://*.clerk.accounts.dev https://*.clerk.com
-                    wss://*.clerk.accounts.dev https://app.cal.com;
+                    wss://*.clerk.accounts.dev https://app.cal.com https://challenges.cloudflare.com;
                   img-src 'self' data: https://*.stripe.com https://*.clerk.accounts.dev https://*.clerk.com;
                   style-src 'self' 'unsafe-inline';
                   font-src 'self' data:;
