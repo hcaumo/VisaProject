@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, useImperativeHandle } from "react";
 
 import { cn } from "@/utils/Helpers";
 import { Button } from "./button";
@@ -19,6 +19,9 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
   ({ className, value, onChange, accept, buttonText = "Upload file", ...props }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [fileName, setFileName] = useState<string | null>(value?.name || null);
+    
+    // Forward the ref to the parent component
+    useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
     const handleClick = () => {
       inputRef.current?.click();

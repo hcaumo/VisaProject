@@ -7,7 +7,6 @@ import { badgeVariants } from '@/components/ui/badgeVariants';
 import { buttonVariants } from '@/components/ui/buttonVariants';
 import { CenteredHero } from '@/features/landing/CenteredHero';
 import { Section } from '@/features/landing/Section';
-import { CalendlyModal } from '@/components/CalendlyModal';
 
 export const Hero = () => {
   const t = useTranslations('Hero');

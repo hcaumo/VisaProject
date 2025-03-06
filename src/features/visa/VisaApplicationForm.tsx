@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Applicant,
   VisaApplication,
   VisaType,
   defaultVisaApplication,
