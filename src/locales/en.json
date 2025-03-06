@@ -13,14 +13,14 @@
     "meta_description": "Dashboard"
   },
   "DashboardIndex": {
-    "title_bar": "Dashboard",
-    "title_bar_description": "Welcome to your dashboard",
+    "title_bar": "My Applications",
+    "title_bar_description": "Manage your visa applications",
     "message_state_title": "Welcome to the Next.js Boilerplate SaaS Starter Kit",
     "message_state_description": "This is a demo of the Next.js Boilerplate SaaS Starter Kit. You can use this as a starting point for your SaaS application. The source code is available on <code>GitHub</code>.",
     "message_state_alternative": "Check out the <url>Next.js Boilerplate SaaS</url> for more features."
   },
   "DashboardLayout": {
-    "application_status": "Application Status",
+    "application_status": "My Applications",
     "my_documents": "My Documents",
     "appointments": "Appointments",
     "settings": "Settings"
@@ -189,6 +189,10 @@
     
     "application_submitted_successfully": "Application submitted successfully!",
     "application_submission_error": "There was an error submitting your application. Please try again.",
+    "payment_processing": "Processing your payment...",
+    "payment_success": "Payment successful! Your application has been submitted.",
+    "payment_cancelled": "Payment was cancelled. Your application has been saved as a draft.",
+    "payment_required": "A payment of ${amount} is required to submit your application.",
     
     "first_name": "First Name",
     "enter_first_name": "Enter your first name",
@@ -257,7 +261,21 @@
     
     "previous": "Previous",
     "next": "Next",
-    "submit_application": "Submit Application"
+    "submit_application": "Submit Application",
+    
+    "status_draft": "Draft",
+    "status_started": "Started",
+    "status_waiting_payment": "Waiting for Payment",
+    "status_pending": "Pending Review",
+    "status_completed": "Completed",
+    "status_approved": "Approved",
+    "status_denied": "Denied",
+    
+    "payment_required": "Payment Required",
+    "complete_payment_to_submit": "Your application is ready to be submitted. Please complete the payment to proceed.",
+    "complete_payment": "Complete Payment",
+    "payment_error": "There was an error processing your payment. Please try again.",
+    "fee": "Application Fee"
   },
   "Documents": {
     "title_bar": "My Documents",
@@ -315,5 +333,26 @@
     "document_type_employment_contract": "Employment Contract",
     "document_type_family_relationship_proof": "Family Relationship Proof",
     "document_type_other": "Other Document"
+  },
+  "SignIn": {
+    "meta_title": "Sign In",
+    "meta_description": "Sign in to your account",
+    "title": "Sign In",
+    "description": "Welcome back! Please sign in to your account.",
+    "sign_in_with_email": "Sign in with Email",
+    "sign_in_with_google": "Sign in with Google",
+    "sign_in_with_github": "Sign in with GitHub",
+    "no_account": "Don't have an account?",
+    "sign_up": "Sign up"
+  },
+  "Payment": {
+    "payment_successful": "Payment Successful",
+    "payment_cancelled": "Payment Cancelled",
+    "payment_successful_description": "Thank you for your payment. Your visa application has been submitted successfully and is now being processed.",
+    "payment_cancelled_description": "Your payment was cancelled. Your visa application has been saved as a draft. You can try again when you're ready.",
+    "redirecting_in": "Redirecting to dashboard in",
+    "seconds": "seconds",
+    "go_to_dashboard": "Go to Dashboard",
+    "try_again": "Try Again"
   }
 }

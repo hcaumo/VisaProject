@@ -27,6 +27,32 @@ export default withSentryConfig(
       experimental: {
         serverComponentsExternalPackages: ['@electric-sql/pglite'],
       },
+      // Add Content Security Policy headers
+      async headers() {
+        return [
+          {
+            source: '/(.*)',
+            headers: [
+              {
+                key: 'Content-Security-Policy',
+                value: `
+                  default-src 'self';
+                  script-src 'self' 'unsafe-eval' 'unsafe-inline'
+                    https://js.stripe.com https://checkout.stripe.com https://m.stripe.network
+                    https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com;
+                  frame-src 'self' https://js.stripe.com https://checkout.stripe.com https://hooks.stripe.com
+                    https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com;
+                  connect-src 'self' https://api.stripe.com https://*.clerk.accounts.dev https://*.clerk.com
+                    wss://*.clerk.accounts.dev https://app.cal.com;
+                  img-src 'self' data: https://*.stripe.com https://*.clerk.accounts.dev https://*.clerk.com;
+                  style-src 'self' 'unsafe-inline';
+                  font-src 'self' data:;
+                `.replace(/\s+/g, ' ').trim(),
+              },
+            ],
+          },
+        ];
+      },
     }),
   ),
   {

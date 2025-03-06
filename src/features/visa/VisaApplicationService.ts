@@ -1,61 +1,34 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStatus, VisaApplication, VisaType, emptyApplicant } from '@/models/VisaApplication';
+import { generateVisaApplication, generateVisaApplications } from '@/utils/FakeDataGenerator';
 
 // Create empty applicants array for mock data
 const createEmptyApplicants = (count: number) => {
   return Array(count).fill(0).map(() => ({ ...emptyApplicant }));
 };
 
-// Mock data for visa applications
+// Generate a mix of applications with different statuses
 const mockApplications: VisaApplication[] = [
-  {
-    id: uuidv4(),
-    status: ApplicationStatus.PENDING,
-    createdAt: new Date(2025, 2, 1),
-    updatedAt: new Date(2025, 2, 1),
-    visaType: VisaType.TOURIST,
-    applicantCount: 2,
-    applicants: createEmptyApplicants(2),
-    plannedArrivalDate: '2025-07-15',
-    plannedDepartureDate: '2025-07-30',
-    accommodationAddress: 'Hotel Example, 123 Main St, Example City',
-  },
-  {
-    id: uuidv4(),
-    status: ApplicationStatus.APPROVED,
-    createdAt: new Date(2025, 1, 15),
-    updatedAt: new Date(2025, 1, 28),
-    visaType: VisaType.BUSINESS,
-    applicantCount: 1,
-    applicants: createEmptyApplicants(1),
-    plannedArrivalDate: '2025-06-10',
-    plannedDepartureDate: '2025-06-20',
-    accommodationAddress: 'Business Hotel, 456 Commerce Ave, Business District',
-  },
-  {
-    id: uuidv4(),
-    status: ApplicationStatus.DENIED,
-    createdAt: new Date(2025, 0, 5),
-    updatedAt: new Date(2025, 0, 20),
-    visaType: VisaType.STUDENT,
-    applicantCount: 1,
-    applicants: createEmptyApplicants(1),
-    plannedArrivalDate: '2025-03-01',
-    plannedDepartureDate: '2025-09-01',
-    accommodationAddress: 'Student Housing, 789 University Blvd, College Town',
-  },
-  {
-    id: uuidv4(),
-    status: ApplicationStatus.DRAFT,
-    createdAt: new Date(2025, 2, 10),
-    updatedAt: new Date(2025, 2, 10),
-    visaType: VisaType.FAMILY,
-    applicantCount: 4,
-    applicants: createEmptyApplicants(4),
-    plannedArrivalDate: '2025-08-01',
-    plannedDepartureDate: '2025-08-30',
-    accommodationAddress: 'Family Residence, 101 Residential St, Suburb Area',
-  },
+  // Generate 5 draft applications
+  ...generateVisaApplications(5, ApplicationStatus.DRAFT),
+  
+  // Generate 3 waiting for payment applications
+  ...generateVisaApplications(3, ApplicationStatus.WAITING_PAYMENT),
+  
+  // Generate 3 pending applications
+  ...generateVisaApplications(3, ApplicationStatus.PENDING),
+  
+  // Generate 2 approved applications
+  ...generateVisaApplications(2, ApplicationStatus.APPROVED),
+  
+  // Generate 1 denied application
+  ...generateVisaApplications(1, ApplicationStatus.DENIED),
+  
+  // Generate 2 completed applications
+  ...generateVisaApplications(2, ApplicationStatus.COMPLETED),
+  
+  // Generate 2 started applications
+  ...generateVisaApplications(2, ApplicationStatus.STARTED),
 ];
 
 // Service class for visa applications
@@ -117,13 +90,38 @@ export class VisaApplicationService {
     return Promise.resolve(updatedApplication);
   }
 
-  // Submit an application (change status from DRAFT to PENDING)
+  // Submit an application (change status from DRAFT to WAITING_PAYMENT)
   static submitApplication(id: string): Promise<VisaApplication | undefined> {
     // Find the application first
     const index = mockApplications.findIndex(app => app.id === id);
     
     if (index === -1) {
       return Promise.resolve(undefined);
+    }
+    
+    // Update the status directly
+    const updatedApplication = { ...mockApplications[index] };
+    updatedApplication.status = ApplicationStatus.WAITING_PAYMENT;
+    updatedApplication.updatedAt = new Date();
+    
+    // Update in mock data
+    mockApplications[index] = updatedApplication;
+    
+    return Promise.resolve(updatedApplication);
+  }
+
+  // Complete payment for an application (change status from WAITING_PAYMENT to PENDING)
+  static completePayment(id: string): Promise<VisaApplication | undefined> {
+    // Find the application first
+    const index = mockApplications.findIndex(app => app.id === id);
+    
+    if (index === -1) {
+      return Promise.resolve(undefined);
+    }
+    
+    // Only update if the status is WAITING_PAYMENT
+    if (mockApplications[index].status !== ApplicationStatus.WAITING_PAYMENT) {
+      return Promise.resolve(mockApplications[index]);
     }
     
     // Update the status directly

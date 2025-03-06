@@ -77,7 +77,7 @@ const ViewEditVisaApplicationPage = () => {
         />
       </div>
 
-      <div className="bg-muted p-4 rounded-md mb-6">
+      <div className="bg-white p-4 rounded-md mb-6 border shadow-sm">
         <div className="flex justify-between items-center">
           <div>
             <h3 className="font-semibold">{t(`visa_type_${application.visaType}`)}</h3>
@@ -95,7 +95,7 @@ const ViewEditVisaApplicationPage = () => {
         {isEditable ? (
           <VisaApplicationForm existingApplication={application} />
         ) : (
-          <div className="border rounded-lg p-6">
+          <div className="bg-white border rounded-lg p-6 shadow-md">
             <h2 className="text-xl font-bold mb-4">{t('application_details')}</h2>
             
             <div className="space-y-6">

@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { StripeService } from "@/features/payment/StripeService";
 import { VisaApplicationService } from "@/features/visa/VisaApplicationService";
 import {
   ApplicationStatus,
@@ -87,24 +88,44 @@ export const VisaApplicationForm = ({ existingApplication }: VisaApplicationForm
 
   const onSubmit = async (data: VisaApplication) => {
     try {
+      let applicationId: string | undefined;
+      
       if (existingApplication?.id) {
         // Update existing application
-        await VisaApplicationService.updateApplication(existingApplication.id, data);
+        const updatedApp = await VisaApplicationService.updateApplication(existingApplication.id, data);
+        applicationId = existingApplication.id;
+        
         // Submit if it's a draft
-        if (existingApplication.status === ApplicationStatus.DRAFT) {
+        if (existingApplication.status === ApplicationStatus.DRAFT && updatedApp) {
           await VisaApplicationService.submitApplication(existingApplication.id);
         }
       } else {
         // Create new application
         const newApp = await VisaApplicationService.createApplication(data);
+        applicationId = newApp.id;
+        
         // Submit the application
         if (newApp.id) {
           await VisaApplicationService.submitApplication(newApp.id);
         }
       }
       
+      // Calculate the fee based on visa type
+      const fee = StripeService.getApplicationFee(data.visaType);
+      
+      // Redirect to Stripe payment
+      await StripeService.redirectToCheckout({
+        amount: fee * 100, // Stripe expects amount in cents
+        currency: 'usd',
+        description: `Visa Application - ${t(`visa_type_${data.visaType}`)}`,
+        applicationId,
+        successUrl: window.location.origin + `/dashboard/payment-success?status=success&applicationId=${applicationId}`,
+        cancelUrl: window.location.origin + `/dashboard/payment-success?status=cancelled&applicationId=${applicationId}`,
+      });
+      
+      // Note: The code below will only execute if the Stripe redirect fails
+      // and the simulation in StripeService is triggered
       alert(t("application_submitted_successfully"));
-      // Redirect to dashboard
       window.location.href = "/dashboard";
     } catch (error) {
       console.error("Error submitting application:", error);
@@ -130,7 +151,7 @@ export const VisaApplicationForm = ({ existingApplication }: VisaApplicationForm
   const applicantCountOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 border">
       {/* Progress indicator */}
       <div className="mb-8">
         <div className="flex justify-between">

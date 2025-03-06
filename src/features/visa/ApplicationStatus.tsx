@@ -22,6 +22,10 @@ const StatusBadge = ({ status }: { status: Status }) => {
       bgColor = "bg-blue-200";
       textColor = "text-blue-800";
       break;
+    case Status.WAITING_PAYMENT:
+      bgColor = "bg-amber-200";
+      textColor = "text-amber-800";
+      break;
     case Status.PENDING:
       bgColor = "bg-yellow-200";
       textColor = "text-yellow-800";
@@ -126,9 +130,10 @@ export const ApplicationStatus = () => {
   };
 
   // Filter applications by status
+  const waitingPaymentApplications = applications.filter(app => app.status === Status.WAITING_PAYMENT);
   const pendingApplications = applications.filter(app => app.status === Status.PENDING);
   const draftApplications = applications.filter(app => app.status === Status.DRAFT || app.status === Status.STARTED);
-  const completedApplications = applications.filter(app => 
+  const completedApplications = applications.filter(app =>
     app.status === Status.COMPLETED || app.status === Status.APPROVED || app.status === Status.DENIED
   );
 
@@ -137,8 +142,8 @@ export const ApplicationStatus = () => {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
+    <div className="bg-white rounded-lg shadow-md p-6 border">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">{t("my_applications")}</h2>
         <Button onClick={handleCreateApplication}>
           {t("new_application")}
@@ -154,16 +159,40 @@ export const ApplicationStatus = () => {
           </Button>
         </div>
       ) : (
-        <>
+        <div className="space-y-8">
+          {waitingPaymentApplications.length > 0 && (
+            <div className="bg-white rounded-lg p-6 border border-amber-200">
+              <h3 className="text-xl font-semibold mb-4 text-amber-800">{t("status_waiting_payment")}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {waitingPaymentApplications.map(app => (
+                  <div key={app.id} className="relative">
+                    <ApplicationCard
+                      application={app}
+                      onSelect={handleSelectApplication}
+                    />
+                    <div className="mt-2">
+                      <Button
+                        className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+                        onClick={() => router.push(`/dashboard/payment-success?status=pending&applicationId=${app.id}`)}
+                      >
+                        {t("complete_payment")}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {pendingApplications.length > 0 && (
-            <div>
+            <div className="bg-white rounded-lg p-6 border">
               <h3 className="text-xl font-semibold mb-4">{t("pending_applications")}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {pendingApplications.map(app => (
-                  <ApplicationCard 
-                    key={app.id} 
-                    application={app} 
-                    onSelect={handleSelectApplication} 
+                  <ApplicationCard
+                    key={app.id}
+                    application={app}
+                    onSelect={handleSelectApplication}
                   />
                 ))}
               </div>
@@ -171,14 +200,14 @@ export const ApplicationStatus = () => {
           )}
 
           {draftApplications.length > 0 && (
-            <div>
+            <div className="bg-white rounded-lg p-6 border">
               <h3 className="text-xl font-semibold mb-4">{t("draft_applications")}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {draftApplications.map(app => (
-                  <ApplicationCard 
-                    key={app.id} 
-                    application={app} 
-                    onSelect={handleSelectApplication} 
+                  <ApplicationCard
+                    key={app.id}
+                    application={app}
+                    onSelect={handleSelectApplication}
                   />
                 ))}
               </div>
@@ -186,20 +215,20 @@ export const ApplicationStatus = () => {
           )}
 
           {completedApplications.length > 0 && (
-            <div>
+            <div className="bg-white rounded-lg p-6 border">
               <h3 className="text-xl font-semibold mb-4">{t("completed_applications")}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {completedApplications.map(app => (
-                  <ApplicationCard 
-                    key={app.id} 
-                    application={app} 
-                    onSelect={handleSelectApplication} 
+                  <ApplicationCard
+                    key={app.id}
+                    application={app}
+                    onSelect={handleSelectApplication}
                   />
                 ))}
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

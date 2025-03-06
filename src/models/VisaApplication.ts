@@ -13,6 +13,7 @@ export enum VisaType {
 export enum ApplicationStatus {
   DRAFT = "draft",
   STARTED = "started",
+  WAITING_PAYMENT = "waiting_payment",
   PENDING = "pending",
   COMPLETED = "completed",
   APPROVED = "approved",
