@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStatus, VisaApplication, VisaType, emptyApplicant } from '@/models/VisaApplication';
 import { generateVisaApplication, generateVisaApplications } from '@/utils/FakeDataGenerator';
+import { AutentiqueClientService } from './AutentiqueClientService';
+import type { AutentiqueService } from './AutentiqueService';
 
 // Create empty applicants array for mock data
 const createEmptyApplicants = (count: number) => {
@@ -61,7 +63,7 @@ export class VisaApplicationService {
       plannedDepartureDate: application.plannedDepartureDate || '',
       accommodationAddress: application.accommodationAddress || '',
       ...application
-    };
+    } as VisaApplication;
     
     // Add to mock data (in a real app, this would be handled by the backend)
     mockApplications.push(newApplication);
@@ -78,11 +80,11 @@ export class VisaApplicationService {
       return Promise.resolve(undefined);
     }
     
-    const updatedApplication: VisaApplication = {
+    const updatedApplication = {
       ...mockApplications[index],
       ...updates,
       updatedAt: new Date(),
-    };
+    } as VisaApplication;
     
     // Update in mock data (in a real app, this would be handled by the backend)
     mockApplications[index] = updatedApplication;
@@ -100,7 +102,7 @@ export class VisaApplicationService {
     }
     
     // Update the status directly
-    const updatedApplication = { ...mockApplications[index] };
+    const updatedApplication = { ...mockApplications[index] } as VisaApplication;
     updatedApplication.status = ApplicationStatus.WAITING_PAYMENT;
     updatedApplication.updatedAt = new Date();
     
@@ -110,8 +112,8 @@ export class VisaApplicationService {
     return Promise.resolve(updatedApplication);
   }
 
-  // Complete payment for an application (change status from WAITING_PAYMENT to PENDING)
-  static completePayment(id: string): Promise<VisaApplication | undefined> {
+  // Complete payment for an application (change status from WAITING_PAYMENT to WAITING_SIGNATURES)
+  static async completePayment(id: string): Promise<VisaApplication | undefined> {
     // Find the application first
     const index = mockApplications.findIndex(app => app.id === id);
     
@@ -120,14 +122,163 @@ export class VisaApplicationService {
     }
     
     // Only update if the status is WAITING_PAYMENT
-    if (mockApplications[index].status !== ApplicationStatus.WAITING_PAYMENT) {
-      return Promise.resolve(mockApplications[index]);
+    if (mockApplications[index]?.status !== ApplicationStatus.WAITING_PAYMENT) {
+      return Promise.resolve(mockApplications[index] as VisaApplication);
     }
     
-    // Update the status directly
-    const updatedApplication = { ...mockApplications[index] };
-    updatedApplication.status = ApplicationStatus.PENDING;
+    // Update the status to PENDING first (intermediate state)
+    const application = { ...mockApplications[index] } as VisaApplication;
+    application.status = ApplicationStatus.PENDING;
+    application.updatedAt = new Date();
+    
+    // Update in mock data
+    mockApplications[index] = application;
+    
+    // Automatically generate legal agreement
+    if (!application.applicants || application.applicants.length === 0) {
+      console.error('No applicants found for application');
+      return Promise.resolve(application);
+    }
+    
+    const mainApplicant = application.applicants[0];
+    
+    // Prepare agreement data with null checks
+    const currentDate = new Date().toISOString().split('T')[0];
+    const agreementData = {
+      clientName: `${mainApplicant?.firstName || ''} ${mainApplicant?.lastName || ''}`,
+      clientMaritalStatus: mainApplicant?.maritalStatus || 'single',
+      clientNationality: mainApplicant?.nationality || '',
+      clientDocumentType: mainApplicant?.documentType || 'passport',
+      clientDocumentNumber: mainApplicant?.documentNumber || mainApplicant?.passportNumber || '',
+      clientDocumentIssuer: mainApplicant?.documentIssuer || 'Unknown',
+      clientDocumentExpiryDate: mainApplicant?.documentExpiryDate || mainApplicant?.passportExpiryDate || '',
+      clientAddress: mainApplicant?.address || 'Unknown',
+      clientTaxId: mainApplicant?.taxId || 'Unknown',
+      clientPhone: mainApplicant?.phone || '',
+      clientEmail: mainApplicant?.email || '',
+      consultantName: application.legalAgreementConsultant || 'Advogados ZR',
+      serviceDescription: `Visa application services for ${application.visaType} visa`,
+      serviceValue: 500, // Example value
+      signatureLocation: 'Lisbon, Portugal',
+      signatureDate: currentDate,
+    };
+    
+    // Generate HTML content for the agreement
+    const agreementHtml = await AutentiqueClientService.generateAgreementHtml(agreementData);
+    
+    // Create document in Autentique
+    const documentId = await AutentiqueClientService.createDocument(
+      `Visa Application Agreement - ${mainApplicant?.firstName || 'Unknown'} ${mainApplicant?.lastName || 'User'}`,
+      agreementHtml,
+      `${mainApplicant?.firstName || 'Unknown'} ${mainApplicant?.lastName || 'User'}`,
+      mainApplicant?.email || 'unknown@example.com'
+    );
+    
+    if (!documentId) {
+      console.error('Failed to create document in Autentique');
+      return Promise.resolve(application);
+    }
+    
+    // Update the application with legal agreement details and change status to WAITING_SIGNATURES
+    const updatedApplication = { ...application };
+    updatedApplication.status = ApplicationStatus.WAITING_SIGNATURES;
     updatedApplication.updatedAt = new Date();
+    updatedApplication.legalAgreementDocumentId = documentId;
+    updatedApplication.legalAgreementSignatureDate = agreementData.signatureDate;
+    updatedApplication.legalAgreementSignatureLocation = agreementData.signatureLocation;
+    updatedApplication.legalAgreementService = application.legalAgreementService;
+    updatedApplication.legalAgreementServiceDescription = agreementData.serviceDescription;
+    updatedApplication.legalAgreementValue = agreementData.serviceValue;
+    
+    // Get the signed document URL
+    const signedUrl = await AutentiqueClientService.getSignedDocumentUrl(documentId);
+    if (signedUrl) {
+      updatedApplication.legalAgreementSignedUrl = signedUrl;
+    }
+    
+    // Update in mock data
+    mockApplications[index] = updatedApplication;
+    
+    return Promise.resolve(updatedApplication);
+  }
+
+  // Generate a legal agreement for an application (change status from PENDING to WAITING_SIGNATURES)
+  static async generateLegalAgreement(id: string): Promise<VisaApplication | undefined> {
+    // Find the application first
+    const index = mockApplications.findIndex(app => app.id === id);
+    
+    if (index === -1) {
+      return Promise.resolve(undefined);
+    }
+    
+    // Only update if the status is PENDING
+    if (mockApplications[index]?.status !== ApplicationStatus.PENDING) {
+      return Promise.resolve(mockApplications[index] as VisaApplication);
+    }
+    
+    const application = mockApplications[index] as VisaApplication;
+    
+    // Check if applicants exist
+    if (!application.applicants || application.applicants.length === 0) {
+      console.error('No applicants found for application');
+      return Promise.resolve(application);
+    }
+    
+    const mainApplicant = application.applicants[0];
+    
+    // Prepare agreement data with null checks
+    const currentDate = new Date().toISOString().split('T')[0];
+    const agreementData = {
+      clientName: `${mainApplicant?.firstName || ''} ${mainApplicant?.lastName || ''}`,
+      clientMaritalStatus: mainApplicant?.maritalStatus || 'single',
+      clientNationality: mainApplicant?.nationality || '',
+      clientDocumentType: mainApplicant?.documentType || 'passport',
+      clientDocumentNumber: mainApplicant?.documentNumber || mainApplicant?.passportNumber || '',
+      clientDocumentIssuer: mainApplicant?.documentIssuer || 'Unknown',
+      clientDocumentExpiryDate: mainApplicant?.documentExpiryDate || mainApplicant?.passportExpiryDate || '',
+      clientAddress: mainApplicant?.address || 'Unknown',
+      clientTaxId: mainApplicant?.taxId || 'Unknown',
+      clientPhone: mainApplicant?.phone || '',
+      clientEmail: mainApplicant?.email || '',
+      consultantName: application.legalAgreementConsultant || 'Advogados ZR',
+      serviceDescription: `Visa application services for ${application.visaType} visa`,
+      serviceValue: 500, // Example value
+      signatureLocation: 'Lisbon, Portugal',
+      signatureDate: currentDate,
+    };
+    
+    // Generate HTML content for the agreement
+    const agreementHtml = await AutentiqueClientService.generateAgreementHtml(agreementData);
+    
+    // Create document in Autentique
+    const documentId = await AutentiqueClientService.createDocument(
+      `Visa Application Agreement - ${mainApplicant?.firstName || 'Unknown'} ${mainApplicant?.lastName || 'User'}`,
+      agreementHtml,
+      `${mainApplicant?.firstName || 'Unknown'} ${mainApplicant?.lastName || 'User'}`,
+      mainApplicant?.email || 'unknown@example.com'
+    );
+    
+    if (!documentId) {
+      console.error('Failed to create document in Autentique');
+      return Promise.resolve(application);
+    }
+    
+    // Update the application with legal agreement details
+    const updatedApplication = { ...application };
+    updatedApplication.status = ApplicationStatus.WAITING_SIGNATURES;
+    updatedApplication.updatedAt = new Date();
+    updatedApplication.legalAgreementDocumentId = documentId;
+    updatedApplication.legalAgreementSignatureDate = agreementData.signatureDate;
+    updatedApplication.legalAgreementSignatureLocation = agreementData.signatureLocation;
+    updatedApplication.legalAgreementService = application.legalAgreementService;
+    updatedApplication.legalAgreementServiceDescription = agreementData.serviceDescription;
+    updatedApplication.legalAgreementValue = agreementData.serviceValue;
+    
+    // Get the signed document URL
+    const signedUrl = await AutentiqueClientService.getSignedDocumentUrl(documentId);
+    if (signedUrl) {
+      updatedApplication.legalAgreementSignedUrl = signedUrl;
+    }
     
     // Update in mock data
     mockApplications[index] = updatedApplication;

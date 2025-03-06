@@ -167,5 +167,76 @@
     "message_title": "Message",
     "message_description": "Entrez un message détaillé pour votre todo.",
     "submit_button": "Envoyer"
+  },
+  "VisaApplication": {
+    "my_applications": "Mes Demandes de Visa",
+    "new_application": "Nouvelle Demande",
+    "schedule_call": "Planifier un Appel",
+    "no_applications": "Aucune Demande Trouvée",
+    "no_applications_description": "Vous n'avez pas encore créé de demande de visa. Cliquez sur le bouton ci-dessous pour commencer votre première demande.",
+    "start_first_application": "Commencer Votre Première Demande",
+    
+    "step_0_title": "Type de Visa",
+    "step_1_title": "Informations Personnelles",
+    "step_2_title": "Informations de Voyage",
+    "step_3_title": "Documents",
+    "step_4_title": "Contrat de Services",
+    "step_5_title": "Révision et Soumission",
+    
+    "step_0_description": "Sélectionnez le type de visa dont vous avez besoin et précisez le nombre de demandeurs.",
+    "step_1_description": "Fournissez vos informations personnelles pour la demande de visa.",
+    "step_2_description": "Fournissez des détails sur vos projets de voyage.",
+    "step_3_description": "Téléchargez les documents requis pour votre demande de visa.",
+    "step_4_description": "Révisez et signez le contrat de services juridiques.",
+    "step_5_description": "Révisez votre demande avant de la soumettre.",
+    
+    "legal_agreement_title": "Contrat de Services Juridiques",
+    "legal_agreement_description": "Veuillez réviser le contrat de services juridiques et fournir les informations requises.",
+    "legal_agreement_service": "Type de Service",
+    "legal_agreement_service_description": "Description du Service",
+    "legal_agreement_value": "Frais de Service (€)",
+    "legal_agreement_signature_location": "Lieu de Signature",
+    "legal_agreement_signature_date": "Date de Signature",
+    "legal_agreement_preview": "Aperçu du Contrat",
+    "legal_agreement_consent": "J'accepte les termes du contrat de services juridiques",
+    "legal_agreement_consent_description": "En cochant cette case, je confirme avoir lu et accepté les termes du contrat de services juridiques.",
+    "legal_agreement_consent_required": "Vous devez accepter le contrat de services juridiques pour continuer.",
+    
+    "select_legal_service": "Sélectionnez le type de service",
+    "enter_service_description": "Entrez la description du service",
+    "enter_agreement_value": "Entrez les frais de service",
+    "enter_signature_location": "Entrez le lieu de signature",
+    
+    "legal_service_visa_application": "Assistance pour Demande de Visa",
+    "legal_service_residence_permit": "Assistance pour Permis de Résidence",
+    "legal_service_citizenship": "Assistance pour Demande de Citoyenneté",
+    "legal_service_legal_consultation": "Consultation Juridique",
+    "legal_service_other": "Autres Services Juridiques",
+    
+    "marital_status": "État Civil",
+    "select_marital_status": "Sélectionnez l'état civil",
+    "marital_status_single": "Célibataire",
+    "marital_status_married": "Marié(e)",
+    "marital_status_divorced": "Divorcé(e)",
+    "marital_status_widowed": "Veuf/Veuve",
+    "marital_status_separated": "Séparé(e)",
+    
+    "document_type": "Type de Document",
+    "select_document_type": "Sélectionnez le type de document",
+    "document_type_passport": "Passeport",
+    "document_type_id_card": "Carte d'Identité",
+    "document_type_drivers_license": "Permis de Conduire",
+    "document_type_other": "Autre",
+    
+    "document_number": "Numéro de Document",
+    "enter_document_number": "Entrez le numéro de document",
+    "document_issuer": "Émetteur du Document",
+    "enter_document_issuer": "Entrez l'émetteur du document",
+    "document_expiry_date": "Date d'Expiration du Document",
+    
+    "address": "Adresse",
+    "enter_address": "Entrez votre adresse complète",
+    "tax_id": "Numéro d'Identification Fiscale",
+    "enter_tax_id": "Entrez votre numéro d'identification fiscale"
   }
 }

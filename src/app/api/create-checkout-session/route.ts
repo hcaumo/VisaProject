@@ -3,99 +3,101 @@ import Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Received request to create checkout session');
+    console.log('Received request to create payment link');
     
     const body = await request.json();
     const { amount, currency, description, applicationId, successUrl, cancelUrl } = body;
     
     console.log('Request body:', { amount, currency, description, applicationId, successUrl, cancelUrl });
 
-    // Check if we have a Stripe secret key
+    // Get Stripe secret key - for sandbox testing we need a real test key
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     console.log('Stripe secret key available:', !!stripeSecretKey);
     
     if (!stripeSecretKey) {
-      console.log('No Stripe secret key found, returning mock session ID');
-      
-      // For demo purposes, we'll just return a mock session ID
-      const mockSessionId = 'cs_test_' + Math.random().toString(36).substring(2, 15);
-      console.log('Generated mock session ID:', mockSessionId);
-      
-      return NextResponse.json({
-        sessionId: mockSessionId,
-        amount,
-        currency,
-        description,
-        applicationId
-      });
+      console.error('No Stripe secret key found. Please set the STRIPE_SECRET_KEY environment variable.');
+      return NextResponse.json(
+        { error: 'Stripe secret key is required for sandbox testing' },
+        { status: 500 }
+      );
     }
 
     // Initialize Stripe with the secret key
     console.log('Initializing Stripe with secret key');
     const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2024-06-20',
+      apiVersion: '2024-06-20', // Using the compatible Stripe API version
     });
 
-    // Create a Stripe Checkout session
-    console.log('Creating Stripe checkout session with params:', {
-      payment_method_types: ['card'],
+    // Create a product for this payment
+    console.log('Creating product for payment');
+    const product = await stripe.products.create({
+      name: description,
+      description: `Payment for ${description}`,
+    });
+    console.log('Created product:', product.id);
+
+    // Create a price for the product
+    console.log('Creating price for product');
+    const price = await stripe.prices.create({
+      product: product.id,
+      unit_amount: amount,
+      currency: currency,
+    });
+    console.log('Created price:', price.id);
+
+    // Create a payment link
+    console.log('Creating payment link with params:', {
       line_items: [
         {
-          price_data: {
-            currency,
-            product_data: { name: description },
-            unit_amount: amount,
-          },
+          price: price.id,
           quantity: 1,
         },
       ],
-      mode: 'payment',
-      success_url: successUrl,
-      cancel_url: cancelUrl,
+      after_completion: {
+        type: 'redirect',
+        redirect: {
+          url: successUrl,
+        },
+      },
     });
     
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+    const paymentLink = await stripe.paymentLinks.create({
       line_items: [
         {
-          price_data: {
-            currency: currency,
-            product_data: {
-              name: description,
-            },
-            unit_amount: amount,
-          },
+          price: price.id,
           quantity: 1,
         },
       ],
-      mode: 'payment',
-      success_url: successUrl,
-      cancel_url: cancelUrl,
+      after_completion: {
+        type: 'redirect',
+        redirect: {
+          url: successUrl,
+        },
+      },
       metadata: {
         applicationId: applicationId || '',
       },
     });
 
-    console.log('Checkout session created successfully');
-    console.log('Session ID:', session.id);
-    console.log('Session URL:', session.url);
+    console.log('Payment link created successfully');
+    console.log('Payment link URL:', paymentLink.url);
     
     return NextResponse.json({
-      sessionId: session.id,
-      sessionUrl: session.url, // Include the session URL for direct redirect
+      paymentLinkId: paymentLink.id,
+      paymentLinkUrl: paymentLink.url,
       amount,
       currency,
       description,
       applicationId
     });
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error creating payment link:', error);
     if (error instanceof Error) {
       console.error('Error message:', error.message);
       console.error('Error stack:', error.stack);
     }
     return NextResponse.json(
-      { error: 'Failed to create checkout session', details: error instanceof Error ? error.message : String(error) },
+      { error: 'Failed to create payment link', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

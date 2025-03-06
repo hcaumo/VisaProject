@@ -25,9 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StripeService } from "@/features/payment/StripeService";
+import { AutentiqueClientService } from "@/features/visa/AutentiqueClientService";
 import { VisaApplicationService } from "@/features/visa/VisaApplicationService";
 import {
   ApplicationStatus,
+  DocumentType,
+  LegalServiceType,
+  MaritalStatus,
   VisaApplication,
   VisaType,
   defaultVisaApplication,
@@ -88,7 +92,57 @@ export const VisaApplicationForm = ({ existingApplication }: VisaApplicationForm
 
   const onSubmit = async (data: VisaApplication) => {
     try {
+      // Set legal agreement consent to true automatically
+      data.legalAgreementConsent = true;
+
       let applicationId: string | undefined;
+      
+      // Generate and send the legal agreement for signature if not already done
+      if (!data.legalAgreementDocumentId && data.applicants.length > 0) {
+        // Get the primary applicant
+        const primaryApplicant = data.applicants[0];
+        
+        // Generate the legal agreement HTML
+        const agreementHtml = await AutentiqueClientService.generateAgreementHtml({
+          clientName: `${primaryApplicant?.firstName || ''} ${primaryApplicant?.lastName || ''}`,
+          clientMaritalStatus: primaryApplicant?.maritalStatus ? t(`marital_status_${primaryApplicant.maritalStatus}`) : "",
+          clientNationality: primaryApplicant?.nationality || '',
+          clientDocumentType: primaryApplicant?.documentType ? t(`document_type_${primaryApplicant.documentType}`) : "",
+          clientDocumentNumber: primaryApplicant?.documentNumber || "",
+          clientDocumentIssuer: primaryApplicant?.documentIssuer || "",
+          clientDocumentExpiryDate: primaryApplicant?.documentExpiryDate || "",
+          clientAddress: primaryApplicant?.address || "",
+          clientTaxId: primaryApplicant?.taxId || "",
+          clientPhone: primaryApplicant?.phone || '',
+          clientEmail: primaryApplicant?.email || '',
+          consultantName: data.legalAgreementConsultant || "Advogados ZR",
+          serviceDescription: data.legalAgreementServiceDescription || (data.legalAgreementService ? t(`legal_service_${data.legalAgreementService}`) : ""),
+          serviceValue: data.legalAgreementValue || 0,
+          signatureLocation: data.legalAgreementSignatureLocation || "",
+          signatureDate: data.legalAgreementSignatureDate || new Date().toISOString().split('T')[0],
+        });
+        
+        // Create the document in Autentique
+        const documentId = await AutentiqueClientService.createDocument(
+          `Visa Application - ${t(`visa_type_${data.visaType}`)} - ${primaryApplicant?.firstName || 'Unknown'} ${primaryApplicant?.lastName || 'User'}`,
+          agreementHtml,
+          `${primaryApplicant?.firstName || 'Unknown'} ${primaryApplicant?.lastName || 'User'}`,
+          primaryApplicant?.email || 'unknown@example.com'
+        );
+        
+        if (documentId) {
+          // Update the application with the document ID
+          data.legalAgreementDocumentId = documentId;
+          
+          // Get the signed document URL
+          const signedUrl = await AutentiqueClientService.getSignedDocumentUrl(documentId);
+          if (signedUrl) {
+            data.legalAgreementSignedUrl = signedUrl;
+          }
+        } else {
+          throw new Error("Failed to create legal agreement document");
+        }
+      }
       
       if (existingApplication?.id) {
         // Update existing application
@@ -334,6 +388,132 @@ export const VisaApplicationForm = ({ existingApplication }: VisaApplicationForm
                           <FormLabel>{t("nationality")}</FormLabel>
                           <FormControl>
                             <Input placeholder={t("enter_nationality")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.maritalStatus`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("marital_status")}</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t("select_marital_status")} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {Object.values(MaritalStatus).map((status) => (
+                                <SelectItem key={status} value={status}>
+                                  {t(`marital_status_${status}`)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.address`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("address")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_address")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.taxId`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("tax_id")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_tax_id")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.documentType`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("document_type")}</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t("select_document_type")} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {Object.values(DocumentType).map((type) => (
+                                <SelectItem key={type} value={type}>
+                                  {t(`document_type_${type}`)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.documentNumber`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("document_number")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_document_number")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.documentIssuer`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("document_issuer")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_document_issuer")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.documentExpiryDate`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("document_expiry_date")}</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -667,6 +847,7 @@ export const VisaApplicationForm = ({ existingApplication }: VisaApplicationForm
               )}
             </div>
           )}
+
 
           {/* Step 5: Review */}
           {currentStep === ApplicationStep.REVIEW && (

@@ -45,7 +45,7 @@ const accommodations = [
 // Generate a random date between start and end dates
 const randomDate = (start: Date, end: Date): string => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  return date.toISOString().split('T')[0] || ''; // Format as YYYY-MM-DD with fallback
 };
 
 // Generate a random phone number

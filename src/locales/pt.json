@@ -92,5 +92,76 @@
     "terms_of_service": "Termos de Serviço",
     "privacy_policy": "Política de Privacidade",
     "designed_by": ""
+  },
+  "VisaApplication": {
+    "my_applications": "Minhas Solicitações de Visto",
+    "new_application": "Nova Solicitação",
+    "schedule_call": "Agendar Chamada",
+    "no_applications": "Nenhuma Solicitação Encontrada",
+    "no_applications_description": "Você ainda não criou nenhuma solicitação de visto. Clique no botão abaixo para iniciar sua primeira solicitação.",
+    "start_first_application": "Iniciar Primeira Solicitação",
+    
+    "step_0_title": "Tipo de Visto",
+    "step_1_title": "Informações Pessoais",
+    "step_2_title": "Informações de Viagem",
+    "step_3_title": "Documentos",
+    "step_4_title": "Contrato de Serviços",
+    "step_5_title": "Revisão e Envio",
+    
+    "step_0_description": "Selecione o tipo de visto que você precisa e especifique o número de solicitantes.",
+    "step_1_description": "Forneça suas informações pessoais para a solicitação de visto.",
+    "step_2_description": "Forneça detalhes sobre seus planos de viagem.",
+    "step_3_description": "Carregue os documentos necessários para sua solicitação de visto.",
+    "step_4_description": "Revise e assine o contrato de serviços jurídicos.",
+    "step_5_description": "Revise sua solicitação antes de enviar.",
+    
+    "legal_agreement_title": "Contrato de Serviços Jurídicos",
+    "legal_agreement_description": "Por favor, revise o contrato de serviços jurídicos e forneça as informações necessárias.",
+    "legal_agreement_service": "Tipo de Serviço",
+    "legal_agreement_service_description": "Descrição do Serviço",
+    "legal_agreement_value": "Taxa de Serviço (€)",
+    "legal_agreement_signature_location": "Local da Assinatura",
+    "legal_agreement_signature_date": "Data da Assinatura",
+    "legal_agreement_preview": "Visualização do Contrato",
+    "legal_agreement_consent": "Concordo com os termos do contrato de serviços jurídicos",
+    "legal_agreement_consent_description": "Ao marcar esta caixa, confirmo que li e concordo com os termos do contrato de serviços jurídicos.",
+    "legal_agreement_consent_required": "Você deve concordar com o contrato de serviços jurídicos para prosseguir.",
+    
+    "select_legal_service": "Selecione o tipo de serviço",
+    "enter_service_description": "Digite a descrição do serviço",
+    "enter_agreement_value": "Digite a taxa de serviço",
+    "enter_signature_location": "Digite o local da assinatura",
+    
+    "legal_service_visa_application": "Assistência para Solicitação de Visto",
+    "legal_service_residence_permit": "Assistência para Autorização de Residência",
+    "legal_service_citizenship": "Assistência para Solicitação de Cidadania",
+    "legal_service_legal_consultation": "Consulta Jurídica",
+    "legal_service_other": "Outros Serviços Jurídicos",
+    
+    "marital_status": "Estado Civil",
+    "select_marital_status": "Selecione o estado civil",
+    "marital_status_single": "Solteiro(a)",
+    "marital_status_married": "Casado(a)",
+    "marital_status_divorced": "Divorciado(a)",
+    "marital_status_widowed": "Viúvo(a)",
+    "marital_status_separated": "Separado(a)",
+    
+    "document_type": "Tipo de Documento",
+    "select_document_type": "Selecione o tipo de documento",
+    "document_type_passport": "Passaporte",
+    "document_type_id_card": "Carteira de Identidade",
+    "document_type_drivers_license": "Carteira de Motorista",
+    "document_type_other": "Outro",
+    
+    "document_number": "Número do Documento",
+    "enter_document_number": "Digite o número do documento",
+    "document_issuer": "Emissor do Documento",
+    "enter_document_issuer": "Digite o emissor do documento",
+    "document_expiry_date": "Data de Validade do Documento",
+    
+    "address": "Endereço",
+    "enter_address": "Digite seu endereço completo",
+    "tax_id": "Número de Identificação Fiscal",
+    "enter_tax_id": "Digite seu número de identificação fiscal"
   }
 }
