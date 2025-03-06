@@ -111,7 +111,7 @@ export default function RootLayout(props: {
           locale={props.params.locale}
           messages={messages}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {props.children}
           </ThemeProvider>
         </NextIntlClientProvider>
