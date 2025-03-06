@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStatus, VisaApplication, VisaType, emptyApplicant } from '@/models/VisaApplication';
-import { generateVisaApplication, generateVisaApplications } from '@/utils/FakeDataGenerator';
+import { generateVisaApplications } from '@/utils/FakeDataGenerator';
 import { AutentiqueClientService } from './AutentiqueClientService';
-import type { AutentiqueService } from './AutentiqueService';
 
 // Create empty applicants array for mock data
 const createEmptyApplicants = (count: number) => {

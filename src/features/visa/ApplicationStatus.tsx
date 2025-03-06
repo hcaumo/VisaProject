@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { ApplicationStatus as Status, VisaApplication, VisaType } from "@/models/VisaApplication";
+import { ApplicationStatus as Status, VisaApplication } from "@/models/VisaApplication";
 import { VisaApplicationService } from "./VisaApplicationService";
 import { StripeService } from "@/features/payment/StripeService";
 

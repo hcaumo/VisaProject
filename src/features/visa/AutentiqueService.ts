@@ -5,8 +5,10 @@
  * This service is meant to be used only on the server-side
  */
 export class AutentiqueService {
-  private static readonly API_URL = "https://api.autentique.com.br/v2";
-  private static readonly TOKEN = process.env.AUTENTIQUE_TOKEN || "";
+  // API URL for future implementation
+  // private static readonly API_URL = "https://api.autentique.com.br/v2";
+  // Token for future implementation
+  // private static readonly TOKEN = process.env.AUTENTIQUE_TOKEN || "";
 
   /**
    * Creates a document in Autentique for signature

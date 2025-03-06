@@ -30,7 +30,6 @@ import { VisaApplicationService } from "@/features/visa/VisaApplicationService";
 import {
   ApplicationStatus,
   DocumentType,
-  LegalServiceType,
   MaritalStatus,
   VisaApplication,
   VisaType,
