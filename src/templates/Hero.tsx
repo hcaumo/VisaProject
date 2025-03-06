@@ -1,13 +1,13 @@
 'use client';
 
-import { GitHubLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-
 import { badgeVariants } from '@/components/ui/badgeVariants';
 import { buttonVariants } from '@/components/ui/buttonVariants';
 import { CenteredHero } from '@/features/landing/CenteredHero';
 import { Section } from '@/features/landing/Section';
+import { CalendlyModal } from '@/components/CalendlyModal';
 
 export const Hero = () => {
   const t = useTranslations('Hero');
@@ -40,20 +40,22 @@ export const Hero = () => {
           <>
             <Link
               className={buttonVariants({ size: 'lg' })}
-              href="#schedule-call"
-              aria-label="Schedule a consultation call"
+              href="/sign-up"
+              aria-label="Apply now for your Visa"
             >
-              {t('primary_button')}
+              Apply now for your Visa
             </Link>
 
-            <Link
+            <button
               className={buttonVariants({ variant: 'outline', size: 'lg' })}
-              href="/how-it-works"
-              aria-label="Learn how our visa process works"
+              data-cal-link="glima-drexfy/certificate"
+              data-cal-namespace="certificate"
+              data-cal-config='{"layout":"month_view"}'
+              aria-label="Schedule a consultation call"
             >
-              <GitHubLogoIcon className="mr-2 size-5" aria-hidden="true" />
-              {t('secondary_button')}
-            </Link>
+              <CalendarIcon className="mr-2 size-5" aria-hidden="true" />
+              Schedule a Call
+            </button>
           </>
         )}
       />

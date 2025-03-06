@@ -178,13 +178,15 @@ const IndexPage = (props: { params: { locale: string } }) => {
             </AccordionItem>
           </Accordion>
           <div className="mt-8 text-center">
-            <Link
-              href="/contact"
+            <button
               className={buttonVariants({ variant: 'outline' })}
+              data-cal-link="glima-drexfy/certificate"
+              data-cal-namespace="certificate"
+              data-cal-config='{"layout":"month_view"}'
               aria-label="Contact us with your questions"
             >
               Have More Questions? Contact Us
-            </Link>
+            </button>
           </div>
         </div>
       </Section>

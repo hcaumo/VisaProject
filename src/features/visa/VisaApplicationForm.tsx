@@ -1,0 +1,699 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import { FileInput } from "@/components/ui/file-input";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  VisaApplication,
+  VisaType,
+  defaultVisaApplication,
+  visaApplicationSchema,
+} from "@/models/VisaApplication";
+
+// Steps in the visa application process
+enum ApplicationStep {
+  VISA_TYPE_SELECTION = 0,
+  PERSONAL_INFORMATION = 1,
+  TRAVEL_INFORMATION = 2,
+  DOCUMENTS = 3,
+  REVIEW = 4,
+}
+
+export const VisaApplicationForm = () => {
+  const t = useTranslations("VisaApplication");
+  const [currentStep, setCurrentStep] = useState<ApplicationStep>(
+    ApplicationStep.VISA_TYPE_SELECTION
+  );
+
+  // Initialize form with default values
+  const form = useForm<VisaApplication>({
+    resolver: zodResolver(visaApplicationSchema),
+    defaultValues: defaultVisaApplication,
+  });
+
+  const onSubmit = (data: VisaApplication) => {
+    console.log("Form submitted:", data);
+    // Here you would typically send the data to your backend
+    alert("Application submitted successfully!");
+  };
+
+  const nextStep = () => {
+    setCurrentStep((prev) => {
+      const next = prev + 1;
+      return next <= ApplicationStep.REVIEW ? next : prev;
+    });
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prev) => {
+      const next = prev - 1;
+      return next >= ApplicationStep.VISA_TYPE_SELECTION ? next : prev;
+    });
+  };
+
+  // Generate an array of numbers for applicant count dropdown
+  const applicantCountOptions = Array.from({ length: 10 }, (_, i) => i + 1);
+
+  return (
+    <div className="w-full max-w-3xl mx-auto">
+      {/* Progress indicator */}
+      <div className="mb-8">
+        <div className="flex justify-between">
+          {Object.values(ApplicationStep)
+            .filter((step) => typeof step === "number")
+            .map((step) => (
+              <div
+                key={step}
+                className={`flex flex-col items-center ${
+                  Number(step) <= currentStep
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                }`}
+              >
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
+                    Number(step) <= currentStep
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {Number(step) + 1}
+                </div>
+                <span className="text-xs">
+                  {t(`step_${step}_title`)}
+                </span>
+              </div>
+            ))}
+        </div>
+        <div className="relative mt-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full h-1 bg-muted" />
+          </div>
+          <div
+            className="absolute inset-0 flex items-center"
+            style={{
+              width: `${
+                (currentStep / (Object.keys(ApplicationStep).length / 2 - 1)) *
+                100
+              }%`,
+            }}
+          >
+            <div className="w-full h-1 bg-primary" />
+          </div>
+        </div>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Step 1: Visa Type Selection */}
+          {currentStep === ApplicationStep.VISA_TYPE_SELECTION && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">{t("step_0_title")}</h2>
+              <p className="text-muted-foreground">{t("step_0_description")}</p>
+
+              <FormField
+                control={form.control}
+                name="visaType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("visa_type")}</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("select_visa_type")} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(VisaType).map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {t(`visa_type_${type}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      {t("visa_type_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="applicantCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("applicant_count")}</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                      defaultValue={field.value?.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("select_applicant_count")} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {applicantCountOptions.map((count) => (
+                          <SelectItem key={count} value={count.toString()}>
+                            {count}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      {t("applicant_count_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
+
+          {/* Step 2: Personal Information */}
+          {currentStep === ApplicationStep.PERSONAL_INFORMATION && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">{t("step_1_title")}</h2>
+              <p className="text-muted-foreground">{t("step_1_description")}</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("first_name")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={t("enter_first_name")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("last_name")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={t("enter_last_name")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("date_of_birth")}</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="nationality"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("nationality")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={t("enter_nationality")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="passportNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("passport_number")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={t("enter_passport_number")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="passportExpiryDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("passport_expiry_date")}</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("email")}</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder={t("enter_email")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("phone")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={t("enter_phone")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Travel Information */}
+          {currentStep === ApplicationStep.TRAVEL_INFORMATION && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">{t("step_2_title")}</h2>
+              <p className="text-muted-foreground">{t("step_2_description")}</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="plannedArrivalDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("planned_arrival_date")}</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="plannedDepartureDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("planned_departure_date")}</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="accommodationAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("accommodation_address")}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t("enter_accommodation_address")} {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      {t("accommodation_address_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
+
+          {/* Step 4: Documents */}
+          {currentStep === ApplicationStep.DOCUMENTS && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">{t("step_3_title")}</h2>
+              <p className="text-muted-foreground">{t("step_3_description")}</p>
+
+              <FormField
+                control={form.control}
+                name="passportScan"
+                render={({ field: { value, onChange, ...field } }) => (
+                  <FormItem>
+                    <FormLabel>{t("passport_scan")}</FormLabel>
+                    <FormControl>
+                      <FileInput
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        buttonText={t("upload_passport_scan")}
+                        value={value as File | null}
+                        onChange={onChange}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t("passport_scan_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="photoId"
+                render={({ field: { value, onChange, ...field } }) => (
+                  <FormItem>
+                    <FormLabel>{t("photo_id")}</FormLabel>
+                    <FormControl>
+                      <FileInput
+                        accept=".jpg,.jpeg,.png"
+                        buttonText={t("upload_photo_id")}
+                        value={value as File | null}
+                        onChange={onChange}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t("photo_id_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="proofOfAccommodation"
+                render={({ field: { value, onChange, ...field } }) => (
+                  <FormItem>
+                    <FormLabel>{t("proof_of_accommodation")}</FormLabel>
+                    <FormControl>
+                      <FileInput
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        buttonText={t("upload_proof_of_accommodation")}
+                        value={value as File | null}
+                        onChange={onChange}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t("proof_of_accommodation_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="financialProof"
+                render={({ field: { value, onChange, ...field } }) => (
+                  <FormItem>
+                    <FormLabel>{t("financial_proof")}</FormLabel>
+                    <FormControl>
+                      <FileInput
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        buttonText={t("upload_financial_proof")}
+                        value={value as File | null}
+                        onChange={onChange}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t("financial_proof_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Conditional fields based on visa type */}
+              {form.watch("visaType") === VisaType.BUSINESS && (
+                <FormField
+                  control={form.control}
+                  name="invitationLetter"
+                  render={({ field: { value, onChange, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>{t("invitation_letter")}</FormLabel>
+                      <FormControl>
+                        <FileInput
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          buttonText={t("upload_invitation_letter")}
+                          value={value as File | null}
+                          onChange={onChange}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t("invitation_letter_description")}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {form.watch("visaType") === VisaType.STUDENT && (
+                <FormField
+                  control={form.control}
+                  name="enrollmentProof"
+                  render={({ field: { value, onChange, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>{t("enrollment_proof")}</FormLabel>
+                      <FormControl>
+                        <FileInput
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          buttonText={t("upload_enrollment_proof")}
+                          value={value as File | null}
+                          onChange={onChange}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t("enrollment_proof_description")}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {form.watch("visaType") === VisaType.WORK && (
+                <FormField
+                  control={form.control}
+                  name="employmentContract"
+                  render={({ field: { value, onChange, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>{t("employment_contract")}</FormLabel>
+                      <FormControl>
+                        <FileInput
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          buttonText={t("upload_employment_contract")}
+                          value={value as File | null}
+                          onChange={onChange}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t("employment_contract_description")}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {form.watch("visaType") === VisaType.FAMILY && (
+                <FormField
+                  control={form.control}
+                  name="familyRelationshipProof"
+                  render={({ field: { value, onChange, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>{t("family_relationship_proof")}</FormLabel>
+                      <FormControl>
+                        <FileInput
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          buttonText={t("upload_family_relationship_proof")}
+                          value={value as File | null}
+                          onChange={onChange}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t("family_relationship_proof_description")}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Step 5: Review */}
+          {currentStep === ApplicationStep.REVIEW && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">{t("step_4_title")}</h2>
+              <p className="text-muted-foreground">{t("step_4_description")}</p>
+
+              <div className="bg-muted p-4 rounded-md">
+                <h3 className="font-semibold mb-2">{t("visa_type")}</h3>
+                <p>{t(`visa_type_${form.watch("visaType")}`)}</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("applicant_count")}: {form.watch("applicantCount")}
+                </p>
+
+                <div className="border-t my-4"></div>
+
+                <h3 className="font-semibold mb-2">{t("personal_information")}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("name")}</p>
+                    <p>
+                      {form.watch("firstName")} {form.watch("lastName")}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("date_of_birth")}</p>
+                    <p>{form.watch("dateOfBirth")}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("nationality")}</p>
+                    <p>{form.watch("nationality")}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("passport")}</p>
+                    <p>
+                      {form.watch("passportNumber")} (Expires: {form.watch("passportExpiryDate")})
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("email")}</p>
+                    <p>{form.watch("email")}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("phone")}</p>
+                    <p>{form.watch("phone")}</p>
+                  </div>
+                </div>
+
+                <div className="border-t my-4"></div>
+
+                <h3 className="font-semibold mb-2">{t("travel_information")}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("planned_arrival_date")}</p>
+                    <p>{form.watch("plannedArrivalDate")}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("planned_departure_date")}</p>
+                    <p>{form.watch("plannedDepartureDate")}</p>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground">{t("accommodation_address")}</p>
+                  <p>{form.watch("accommodationAddress")}</p>
+                </div>
+
+                <div className="border-t my-4"></div>
+
+                <h3 className="font-semibold mb-2">{t("documents")}</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>
+                    {form.watch("passportScan")
+                      ? `${t("passport_scan")}: ${form.watch("passportScan")?.name}`
+                      : `${t("passport_scan")}: ${t("not_uploaded")}`}
+                  </li>
+                  <li>
+                    {form.watch("photoId")
+                      ? `${t("photo_id")}: ${form.watch("photoId")?.name}`
+                      : `${t("photo_id")}: ${t("not_uploaded")}`}
+                  </li>
+                  <li>
+                    {form.watch("proofOfAccommodation")
+                      ? `${t("proof_of_accommodation")}: ${form.watch("proofOfAccommodation")?.name}`
+                      : `${t("proof_of_accommodation")}: ${t("not_uploaded")}`}
+                  </li>
+                  <li>
+                    {form.watch("financialProof")
+                      ? `${t("financial_proof")}: ${form.watch("financialProof")?.name}`
+                      : `${t("financial_proof")}: ${t("not_uploaded")}`}
+                  </li>
+                </ul>
+              </div>
+
+              <div className="border p-4 rounded-md bg-yellow-50 text-yellow-800">
+                <h3 className="font-semibold mb-2">{t("terms_and_conditions_title")}</h3>
+                <p className="text-sm">{t("terms_and_conditions_text")}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation buttons */}
+          <div className="flex justify-between pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={prevStep}
+              disabled={currentStep === ApplicationStep.VISA_TYPE_SELECTION}
+            >
+              {t("previous")}
+            </Button>
+
+            {currentStep < ApplicationStep.REVIEW ? (
+              <Button type="button" onClick={nextStep}>
+                {t("next")}
+              </Button>
+            ) : (
+              <Button type="submit">{t("submit_application")}</Button>
+            )}
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+};

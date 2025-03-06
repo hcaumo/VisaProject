@@ -17,13 +17,15 @@ export const CTA = () => {
         description={t('description')}
         buttons={(
           <>
-            <Link
+            <button
               className={buttonVariants({ size: 'lg' })}
-              href="#schedule-call"
+              data-cal-link="glima-drexfy/certificate"
+              data-cal-namespace="certificate"
+              data-cal-config='{"layout":"month_view"}'
               aria-label="Schedule a consultation call"
             >
               {t('button_text')}
-            </Link>
+            </button>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link
                 href="/digital-nomad-visa"

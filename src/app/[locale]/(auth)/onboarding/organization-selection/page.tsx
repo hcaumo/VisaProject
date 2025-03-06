@@ -1,4 +1,4 @@
-import { OrganizationList } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -13,16 +13,12 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const OrganizationSelectionPage = () => (
-  <div className="flex min-h-screen items-center justify-center">
-    <OrganizationList
-      afterSelectOrganizationUrl="/dashboard"
-      afterCreateOrganizationUrl="/dashboard"
-      hidePersonal
-      skipInvitationScreen
-    />
-  </div>
-);
+// B2C product - no organization selection needed
+// Redirect directly to dashboard
+const OrganizationSelectionPage = () => {
+  redirect('/dashboard');
+  return null;
+};
 
 export const dynamic = 'force-dynamic';
 
