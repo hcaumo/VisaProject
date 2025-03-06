@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { FileInput } from "@/components/ui/file-input";
@@ -25,9 +25,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Applicant,
   VisaApplication,
   VisaType,
   defaultVisaApplication,
+  emptyApplicant,
   visaApplicationSchema,
 } from "@/models/VisaApplication";
 
@@ -51,6 +53,32 @@ export const VisaApplicationForm = () => {
     resolver: zodResolver(visaApplicationSchema),
     defaultValues: defaultVisaApplication,
   });
+
+  // Set up field array for applicants
+  const { fields: applicantFields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "applicants",
+  });
+
+  // Watch for changes in applicant count to update the applicants array
+  const applicantCount = form.watch("applicantCount");
+  
+  useEffect(() => {
+    // Update applicants array when applicant count changes
+    const currentApplicants = applicantFields.length;
+    
+    if (applicantCount > currentApplicants) {
+      // Add new applicants
+      for (let i = currentApplicants; i < applicantCount; i++) {
+        append({ ...emptyApplicant });
+      }
+    } else if (applicantCount < currentApplicants) {
+      // Remove excess applicants
+      for (let i = currentApplicants - 1; i >= applicantCount; i--) {
+        remove(i);
+      }
+    }
+  }, [applicantCount, applicantFields.length, append, remove]);
 
   const onSubmit = (data: VisaApplication) => {
     console.log("Form submitted:", data);
@@ -198,123 +226,131 @@ export const VisaApplicationForm = () => {
 
           {/* Step 2: Personal Information */}
           {currentStep === ApplicationStep.PERSONAL_INFORMATION && (
-            <div className="space-y-4">
+            <div className="space-y-8">
               <h2 className="text-2xl font-bold">{t("step_1_title")}</h2>
               <p className="text-muted-foreground">{t("step_1_description")}</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("first_name")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("enter_first_name")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {applicantFields.map((applicantField, applicantIndex) => (
+                <div key={applicantField.id} className="border rounded-lg p-4 space-y-4">
+                  <h3 className="text-xl font-semibold">
+                    {t("applicant")} {applicantIndex + 1}
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.firstName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("first_name")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_first_name")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("last_name")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("enter_last_name")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.lastName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("last_name")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_last_name")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("date_of_birth")}</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.dateOfBirth`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("date_of_birth")}</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="nationality"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("nationality")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("enter_nationality")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.nationality`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("nationality")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_nationality")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="passportNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("passport_number")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("enter_passport_number")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.passportNumber`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("passport_number")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_passport_number")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="passportExpiryDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("passport_expiry_date")}</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.passportExpiryDate`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("passport_expiry_date")}</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("email")}</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder={t("enter_email")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.email`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("email")}</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder={t("enter_email")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("phone")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("enter_phone")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                    <FormField
+                      control={form.control}
+                      name={`applicants.${applicantIndex}.phone`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("phone")}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={t("enter_phone")} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
@@ -375,55 +411,66 @@ export const VisaApplicationForm = () => {
 
           {/* Step 4: Documents */}
           {currentStep === ApplicationStep.DOCUMENTS && (
-            <div className="space-y-4">
+            <div className="space-y-8">
               <h2 className="text-2xl font-bold">{t("step_3_title")}</h2>
               <p className="text-muted-foreground">{t("step_3_description")}</p>
 
-              <FormField
-                control={form.control}
-                name="passportScan"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <FormItem>
-                    <FormLabel>{t("passport_scan")}</FormLabel>
-                    <FormControl>
-                      <FileInput
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        buttonText={t("upload_passport_scan")}
-                        value={value as File | null}
-                        onChange={onChange}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t("passport_scan_description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Applicant-specific documents */}
+              {applicantFields.map((applicantField, applicantIndex) => (
+                <div key={applicantField.id} className="border rounded-lg p-4 space-y-4">
+                  <h3 className="text-xl font-semibold">
+                    {t("applicant")} {applicantIndex + 1}: {form.watch(`applicants.${applicantIndex}.firstName`)} {form.watch(`applicants.${applicantIndex}.lastName`)}
+                  </h3>
+                  
+                  <FormField
+                    control={form.control}
+                    name={`applicants.${applicantIndex}.passportScan`}
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <FormItem>
+                        <FormLabel>{t("passport_scan")}</FormLabel>
+                        <FormControl>
+                          <FileInput
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            buttonText={t("upload_passport_scan")}
+                            value={value as File | null}
+                            onChange={onChange}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          {t("passport_scan_description")}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <FormField
-                control={form.control}
-                name="photoId"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <FormItem>
-                    <FormLabel>{t("photo_id")}</FormLabel>
-                    <FormControl>
-                      <FileInput
-                        accept=".jpg,.jpeg,.png"
-                        buttonText={t("upload_photo_id")}
-                        value={value as File | null}
-                        onChange={onChange}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t("photo_id_description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name={`applicants.${applicantIndex}.photoId`}
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <FormItem>
+                        <FormLabel>{t("photo_id")}</FormLabel>
+                        <FormControl>
+                          <FileInput
+                            accept=".jpg,.jpeg,.png"
+                            buttonText={t("upload_photo_id")}
+                            value={value as File | null}
+                            onChange={onChange}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          {t("photo_id_description")}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ))}
+
+              <h3 className="text-xl font-semibold mt-8">{t("common_documents")}</h3>
 
               <FormField
                 control={form.control}
@@ -590,36 +637,44 @@ export const VisaApplicationForm = () => {
                 <div className="border-t my-4"></div>
 
                 <h3 className="font-semibold mb-2">{t("personal_information")}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("name")}</p>
-                    <p>
-                      {form.watch("firstName")} {form.watch("lastName")}
-                    </p>
+                
+                {applicantFields.map((applicantField, applicantIndex) => (
+                  <div key={applicantField.id} className="mb-4 border-l-4 border-primary pl-4">
+                    <h4 className="font-medium mb-2">
+                      {t("applicant")} {applicantIndex + 1}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("name")}</p>
+                        <p>
+                          {form.watch(`applicants.${applicantIndex}.firstName`)} {form.watch(`applicants.${applicantIndex}.lastName`)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("date_of_birth")}</p>
+                        <p>{form.watch(`applicants.${applicantIndex}.dateOfBirth`)}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("nationality")}</p>
+                        <p>{form.watch(`applicants.${applicantIndex}.nationality`)}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("passport")}</p>
+                        <p>
+                          {form.watch(`applicants.${applicantIndex}.passportNumber`)} (Expires: {form.watch(`applicants.${applicantIndex}.passportExpiryDate`)})
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("email")}</p>
+                        <p>{form.watch(`applicants.${applicantIndex}.email`)}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("phone")}</p>
+                        <p>{form.watch(`applicants.${applicantIndex}.phone`)}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("date_of_birth")}</p>
-                    <p>{form.watch("dateOfBirth")}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("nationality")}</p>
-                    <p>{form.watch("nationality")}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("passport")}</p>
-                    <p>
-                      {form.watch("passportNumber")} (Expires: {form.watch("passportExpiryDate")})
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("email")}</p>
-                    <p>{form.watch("email")}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("phone")}</p>
-                    <p>{form.watch("phone")}</p>
-                  </div>
-                </div>
+                ))}
 
                 <div className="border-t my-4"></div>
 
@@ -642,17 +697,29 @@ export const VisaApplicationForm = () => {
                 <div className="border-t my-4"></div>
 
                 <h3 className="font-semibold mb-2">{t("documents")}</h3>
+                
+                {applicantFields.map((applicantField, applicantIndex) => (
+                  <div key={applicantField.id} className="mb-4 border-l-4 border-primary pl-4">
+                    <h4 className="font-medium mb-2">
+                      {t("applicant")} {applicantIndex + 1}: {form.watch(`applicants.${applicantIndex}.firstName`)} {form.watch(`applicants.${applicantIndex}.lastName`)}
+                    </h4>
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>
+                        {form.watch(`applicants.${applicantIndex}.passportScan`)
+                          ? `${t("passport_scan")}: ${form.watch(`applicants.${applicantIndex}.passportScan`)?.name}`
+                          : `${t("passport_scan")}: ${t("not_uploaded")}`}
+                      </li>
+                      <li>
+                        {form.watch(`applicants.${applicantIndex}.photoId`)
+                          ? `${t("photo_id")}: ${form.watch(`applicants.${applicantIndex}.photoId`)?.name}`
+                          : `${t("photo_id")}: ${t("not_uploaded")}`}
+                      </li>
+                    </ul>
+                  </div>
+                ))}
+                
+                <h4 className="font-medium mt-4 mb-2">{t("common_documents")}</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>
-                    {form.watch("passportScan")
-                      ? `${t("passport_scan")}: ${form.watch("passportScan")?.name}`
-                      : `${t("passport_scan")}: ${t("not_uploaded")}`}
-                  </li>
-                  <li>
-                    {form.watch("photoId")
-                      ? `${t("photo_id")}: ${form.watch("photoId")?.name}`
-                      : `${t("photo_id")}: ${t("not_uploaded")}`}
-                  </li>
                   <li>
                     {form.watch("proofOfAccommodation")
                       ? `${t("proof_of_accommodation")}: ${form.watch("proofOfAccommodation")?.name}`

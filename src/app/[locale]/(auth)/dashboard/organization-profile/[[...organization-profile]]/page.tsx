@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 // Redirect to user profile instead
 const OrganizationProfilePage = (props: { params: { locale: string } }) => {
   redirect(`/${props.params.locale}/dashboard/user-profile`);
-  return null;
+  // Removed unreachable code
 };
 
 export default OrganizationProfilePage;
