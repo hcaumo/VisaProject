@@ -1,4 +1,8 @@
 {
+  "Index": {
+    "meta_title": "Drexfy Visa – Your Gateway to a Digital Nomad Life in Portugal",
+    "meta_description": "Drexfy Visa combines cutting-edge AI tools with expert legal guidance to make your relocation to Portugal simple, efficient, and personalized."
+  },
   "AppConfig": {
     "title": "Next.js Boilerplate",
     "description": "Next.js Boilerplate is the perfect starter code for your project. Build your React application with the Next.js framework.",
@@ -24,12 +28,20 @@
   "Footer": {
     "terms": "Terms",
     "privacy": "Privacy",
-    "cookies": "Cookies"
+    "cookies": "Cookies",
+    "docs": "How It Works",
+    "blog": "Blog",
+    "community": "Community",
+    "company": "About Us",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "designed_by": "Designed by <author>Drexfy</author>"
   },
   "Hero": {
-    "title": "The React Framework for the Web",
-    "description": "Next.js by Vercel is the full-stack React framework for the web.",
-    "ctaText": "Get Started"
+    "title": "Drexfy Visa – Your <important>Gateway to a Digital Nomad Life</important> in Portugal",
+    "description": "Welcome to Drexfy Visa, your partner in making your relocation to Portugal smooth, efficient, and stress-free. Combining cutting-edge AI technology with experienced legal professionals, we offer personalized visa solutions tailored specifically for digital nomads, tech entrepreneurs, and creative professionals.",
+    "ctaText": "Get Started",
+    "follow_twitter": "Follow us for updates"
   },
   "I18n": {
     "language": "Language",
@@ -40,7 +52,11 @@
   "Navbar": {
     "pricing": "Pricing",
     "sign_in": "Sign in",
-    "sign_up": "Sign up"
+    "sign_up": "Sign up",
+    "product": "Product",
+    "blog": "Blog",
+    "company": "Company",
+    "services": "Services"
   },
   "OrganizationProfile": {
     "title_bar": "Organization Profile",
@@ -58,11 +74,64 @@
     "current_plan": "Current Plan",
     "contact_us": "Contact Us",
     "contact_us_description": "Need a custom plan? Contact us for more information.",
-    "contact_us_button": "Contact Us"
+    "contact_us_button": "Contact Us",
+    "section_subtitle": "Our Visa Options",
+    "section_title": "Choose the Right Visa for Your Lifestyle",
+    "section_description": "Select the visa type that best suits your situation. All packages include our comprehensive support services.",
+    "button_text": "Get Started"
+  },
+  "PricingPlan": {
+    "free_plan_name": "Digital Nomad Visa",
+    "premium_plan_name": "Entrepreneur Visa",
+    "enterprise_plan_name": "Creative Professional Visa",
+    "free_plan_description": "For remote workers",
+    "premium_plan_description": "For business owners",
+    "enterprise_plan_description": "For artists and creators",
+    "feature_team_member": "Up to {number} Family Members",
+    "feature_website": "{number} Year Validity",
+    "feature_storage": "Document Storage",
+    "feature_transfer": "Translation Services",
+    "feature_email_support": "24/7 Support",
+    "plan_interval_month": "month",
+    "plan_interval_year": "year",
+    "next_renew_date": "Your visa expires on {date}"
   },
   "UserProfile": {
     "title_bar": "User Profile",
     "title_bar_description": "Manage your user profile"
+  },
+  "Features": {
+    "section_title": "Our Services",
+    "section_subtitle": "Simplified Visas and Relocation Solutions for Digital Professionals",
+    "section_description": "Portugal has rapidly become one of Europe's most attractive destinations for international talent, known for its welcoming culture, pleasant climate, and innovative business environment. Drexfy Visa helps you seamlessly integrate into this vibrant community.",
+    "feature1_title": "Digital Nomad Visa",
+    "feature1_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature2_title": "Entrepreneur Visa",
+    "feature2_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature3_title": "Creative Professional Visa",
+    "feature3_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature4_title": "Legal Guidance",
+    "feature4_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature5_title": "Document Preparation",
+    "feature5_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature6_title": "Relocation Support",
+    "feature6_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal."
+  },
+  "HomeFAQ": {
+    "title": "Frequently Asked Questions",
+    "question1": "What types of visas does Drexfy Visa support?",
+    "answer1": "Drexfy Visa specializes in Digital Nomad Visas, Entrepreneur Visas, and Creative Professional Visas for Portugal. We provide comprehensive support for each visa type, tailored to your specific situation.",
+    "question2": "How long does the visa process typically take?",
+    "answer2": "The visa process typically takes 2-3 months from application to approval. Our streamlined process helps minimize delays and ensures all documentation is properly prepared.",
+    "question3": "Can I apply remotely through Drexfy Visa?",
+    "answer3": "Yes, our entire application process can be completed remotely. We handle all interactions with Portuguese authorities on your behalf, making it possible to secure your visa without traveling to Portugal until approval.",
+    "question4": "What makes Drexfy Visa different from other services?",
+    "answer4": "Drexfy Visa combines AI-powered document processing with experienced legal professionals to provide a faster, more accurate, and personalized visa application experience. Our success rate and dedicated support team set us apart from traditional visa services."
+  },
+  "CTA": {
+    "title": "Ready to Start Your Portugal Journey?",
+    "description": "Take the first step toward your new life in Portugal. Our team is ready to guide you through every stage of the visa application process.",
+    "button_text": "Schedule a Free Consultation"
   },
   "VisaApplication": {
     "step_0_title": "Visa Type",

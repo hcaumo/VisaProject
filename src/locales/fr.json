@@ -13,7 +13,7 @@
     "company": "Entreprise"
   },
   "Hero": {
-    "follow_twitter": "Suivez @Ixartz sur Twitter",
+    "follow_twitter": "Follow us for updates",
     "title": "Le parfait <important>SaaS template</important> pour construire et mettre à l'échelle votre entreprise en toute simplicité.",
     "description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS.",
     "primary_button": "Démarrer",
@@ -24,15 +24,20 @@
   },
   "Features": {
     "section_subtitle": "Fonctionnalités",
-    "section_title": "Débloquer le plein potentiel du SaaS Template",
-    "section_description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS.",
-    "feature1_title": "Node.js",
-    "feature2_title": "React",
-    "feature3_title": "Tailwind CSS",
-    "feature4_title": "TypeScript",
-    "feature5_title": "Shadcn UI",
-    "feature6_title": "ESLint",
-    "feature_description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS."
+    "section_title": "Our Services",
+    "section_description": "Simplified Visas and Relocation Solutions for Digital Professionals",
+    "feature1_title": "Digital Nomad Visa",
+    "feature2_title": "Entrepreneur Visa",
+    "feature3_title": "Creative Professional Visa",
+    "feature4_title": "Legal Guidance",
+    "feature5_title": "Document Preparation",
+    "feature6_title": "Relocation Support",
+    "feature1_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature2_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature3_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature4_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature5_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal.",
+    "feature6_description": "Our comprehensive visa and relocation services ensure a smooth transition to your new life in Portugal."
   },
   "Pricing": {
     "section_subtitle": "Fonctionnalités",
