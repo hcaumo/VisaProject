@@ -1,12 +1,10 @@
 "use client";
 
-import { loadStripe } from '@stripe/stripe-js';
 import { AppConfig, AllLocales } from '@/utils/AppConfig';
 
 // Initialize Stripe with your publishable key from environment variable
 const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
 console.log('Stripe publishable key:', STRIPE_PUBLISHABLE_KEY);
-const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
 
 export interface PaymentOptions {
   amount: number;
