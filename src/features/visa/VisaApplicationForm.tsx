@@ -125,7 +125,7 @@ export const VisaApplicationForm = ({ existingApplication }: VisaApplicationForm
       
       // Note: The code below will only execute if the Stripe redirect fails
       // and the simulation in StripeService is triggered
-      alert(t("application_submitted_successfully"));
+      // We'll just redirect to the dashboard without showing an alert
       window.location.href = "/dashboard";
     } catch (error) {
       console.error("Error submitting application:", error);

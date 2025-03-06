@@ -3,7 +3,9 @@
 import { loadStripe } from '@stripe/stripe-js';
 
 // Initialize Stripe with your publishable key from environment variable
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
+console.log('Stripe publishable key:', STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
 
 export interface PaymentOptions {
   amount: number;
@@ -21,11 +23,12 @@ export class StripeService {
   static async redirectToCheckout(options: PaymentOptions): Promise<void> {
     try {
       console.log('Starting Stripe checkout process...');
+      console.log('Options:', options);
       
-      // In a real application, this would be an API call to your backend
-      // which would create a Checkout session and return the session ID
+      // Create a checkout session
       console.log('Creating checkout session with options:', options);
       
+      // Use absolute path to avoid locale prefix issues
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -56,21 +59,13 @@ export class StripeService {
         throw new Error('No sessionId returned from API');
       }
       
-      // Redirect to Stripe Checkout
-      console.log('Loading Stripe...');
-      const stripe = await stripePromise;
-      if (!stripe) {
-        console.error('Failed to load Stripe');
-        throw new Error('Failed to load Stripe');
-      }
+      // DIRECT APPROACH: Use the session URL if available, otherwise construct it
+      const checkoutUrl = data.sessionUrl || `https://checkout.stripe.com/pay/${sessionId}`;
+      console.log('Redirecting directly to:', checkoutUrl);
+      window.location.href = checkoutUrl;
       
-      console.log('Redirecting to Stripe checkout...');
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-      
-      if (error) {
-        console.error('Stripe redirect error:', error);
-        throw new Error(error.message);
-      }
+      // Return early to prevent any further code execution
+      return;
     } catch (error) {
       console.error('Error redirecting to Stripe Checkout:', error);
       
@@ -82,7 +77,7 @@ export class StripeService {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Redirect to payment success page
-      window.location.href = window.location.origin + '/dashboard/payment-success?status=success';
+      window.location.href = window.location.origin + '/dashboard/payment-success?status=success&applicationId=' + options.applicationId;
     }
   }
 

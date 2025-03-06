@@ -40,6 +40,7 @@ export default withSentryConfig(
                   script-src 'self' 'unsafe-eval' 'unsafe-inline'
                     https://js.stripe.com https://checkout.stripe.com https://m.stripe.network
                     https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com;
+                  worker-src 'self' blob:;
                   frame-src 'self' https://js.stripe.com https://checkout.stripe.com https://hooks.stripe.com
                     https://app.cal.com https://*.clerk.accounts.dev https://*.clerk.com;
                   connect-src 'self' https://api.stripe.com https://*.clerk.accounts.dev https://*.clerk.com
