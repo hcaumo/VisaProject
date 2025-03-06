@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 // Redirect directly to dashboard
 const OrganizationSelectionPage = () => {
   redirect('/dashboard');
-  return null;
+  // Removed unreachable code
 };
 
 export const dynamic = 'force-dynamic';
