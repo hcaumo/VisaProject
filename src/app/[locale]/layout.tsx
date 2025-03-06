@@ -2,6 +2,7 @@ import '@/styles/global.css';
 
 import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { ThemeProvider } from 'next-themes';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 // No import needed
@@ -44,6 +45,10 @@ export const metadata: Metadata = {
   },
   icons: [
     {
+      rel: 'icon',
+      url: '/favicon.ico',
+    },
+    {
       rel: 'apple-touch-icon',
       url: '/apple-touch-icon.png',
     },
@@ -58,10 +63,6 @@ export const metadata: Metadata = {
       type: 'image/png',
       sizes: '16x16',
       url: '/favicon-16x16.png',
-    },
-    {
-      rel: 'icon',
-      url: '/favicon.ico',
     },
   ],
   alternates: {
@@ -110,7 +111,9 @@ export default function RootLayout(props: {
           locale={props.params.locale}
           messages={messages}
         >
-          {props.children}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {props.children}
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

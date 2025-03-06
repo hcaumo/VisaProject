@@ -19,7 +19,7 @@ export const CenteredMenu = (props: {
 
   return (
     <div className="flex flex-wrap items-center justify-between">
-      <Link href="/">{props.logo}</Link>
+      <div>{props.logo}</div>
 
       <div className="lg:hidden [&_button:hover]:opacity-100 [&_button]:opacity-60">
         <ToggleMenuButton onClick={handleToggleMenu} />

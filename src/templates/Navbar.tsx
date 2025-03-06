@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { buttonVariants } from '@/components/ui/buttonVariants';
@@ -16,6 +16,43 @@ export const Navbar = () => {
   const [visaDropdownOpen, setVisaDropdownOpen] = useState(false);
   const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  
+  // Refs for timeout handlers
+  const visaTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resourcesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const servicesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Functions to handle dropdown opening and closing with delay
+  const handleOpenDropdown = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setter(true);
+  };
+  
+  const handleCloseDropdown = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+    timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>
+  ) => {
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    // Set a new timeout to close the dropdown after a delay
+    timeoutRef.current = setTimeout(() => {
+      setter(false);
+    }, 300); // 300ms delay before closing
+  };
+  
+  const handleMouseEnter = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+    timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>
+  ) => {
+    // Clear any existing timeout to prevent closing
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setter(true);
+  };
 
   return (
     <Section className="px-3 py-6">
@@ -40,12 +77,15 @@ export const Navbar = () => {
       >
         {/* Visa Services Dropdown */}
         <li className="group relative">
+          {/* Invisible connector div to create continuous hover area */}
+          <div className={`absolute inset-x-0 -bottom-2 h-2 ${visaDropdownOpen ? 'block' : 'hidden'}`} />
+          
           <button
             type="button"
             className="flex items-center"
             onClick={() => setVisaDropdownOpen(!visaDropdownOpen)}
-            onMouseEnter={() => setVisaDropdownOpen(true)}
-            onMouseLeave={() => setVisaDropdownOpen(false)}
+            onMouseEnter={() => handleOpenDropdown(setVisaDropdownOpen)}
+            onMouseLeave={() => handleCloseDropdown(setVisaDropdownOpen, visaTimeoutRef)}
             aria-expanded={visaDropdownOpen}
             aria-haspopup="true"
           >
@@ -56,8 +96,8 @@ export const Navbar = () => {
           </button>
           <div
             className={`absolute left-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-800 ${visaDropdownOpen ? 'block' : 'hidden'}`}
-            onMouseEnter={() => setVisaDropdownOpen(true)}
-            onMouseLeave={() => setVisaDropdownOpen(false)}
+            onMouseEnter={() => handleMouseEnter(setVisaDropdownOpen, visaTimeoutRef)}
+            onMouseLeave={() => handleCloseDropdown(setVisaDropdownOpen, visaTimeoutRef)}
             role="menu"
             aria-orientation="vertical"
             tabIndex={0}
@@ -90,12 +130,15 @@ export const Navbar = () => {
 
         {/* Services Dropdown */}
         <li className="group relative">
+          {/* Invisible connector div to create continuous hover area */}
+          <div className={`absolute inset-x-0 -bottom-2 h-2 ${servicesDropdownOpen ? 'block' : 'hidden'}`} />
+          
           <button
             type="button"
             className="flex items-center"
             onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-            onMouseEnter={() => setServicesDropdownOpen(true)}
-            onMouseLeave={() => setServicesDropdownOpen(false)}
+            onMouseEnter={() => handleOpenDropdown(setServicesDropdownOpen)}
+            onMouseLeave={() => handleCloseDropdown(setServicesDropdownOpen, servicesTimeoutRef)}
             aria-expanded={servicesDropdownOpen}
             aria-haspopup="true"
           >
@@ -106,8 +149,8 @@ export const Navbar = () => {
           </button>
           <div
             className={`absolute left-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-800 ${servicesDropdownOpen ? 'block' : 'hidden'}`}
-            onMouseEnter={() => setServicesDropdownOpen(true)}
-            onMouseLeave={() => setServicesDropdownOpen(false)}
+            onMouseEnter={() => handleMouseEnter(setServicesDropdownOpen, servicesTimeoutRef)}
+            onMouseLeave={() => handleCloseDropdown(setServicesDropdownOpen, servicesTimeoutRef)}
             role="menu"
             aria-orientation="vertical"
             tabIndex={0}
@@ -137,12 +180,15 @@ export const Navbar = () => {
 
         {/* Resources Dropdown */}
         <li className="group relative">
+          {/* Invisible connector div to create continuous hover area */}
+          <div className={`absolute inset-x-0 -bottom-2 h-2 ${resourcesDropdownOpen ? 'block' : 'hidden'}`} />
+          
           <button
             type="button"
             className="flex items-center"
             onClick={() => setResourcesDropdownOpen(!resourcesDropdownOpen)}
-            onMouseEnter={() => setResourcesDropdownOpen(true)}
-            onMouseLeave={() => setResourcesDropdownOpen(false)}
+            onMouseEnter={() => handleOpenDropdown(setResourcesDropdownOpen)}
+            onMouseLeave={() => handleCloseDropdown(setResourcesDropdownOpen, resourcesTimeoutRef)}
             aria-expanded={resourcesDropdownOpen}
             aria-haspopup="true"
           >
@@ -153,8 +199,8 @@ export const Navbar = () => {
           </button>
           <div
             className={`absolute left-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-800 ${resourcesDropdownOpen ? 'block' : 'hidden'}`}
-            onMouseEnter={() => setResourcesDropdownOpen(true)}
-            onMouseLeave={() => setResourcesDropdownOpen(false)}
+            onMouseEnter={() => handleMouseEnter(setResourcesDropdownOpen, resourcesTimeoutRef)}
+            onMouseLeave={() => handleCloseDropdown(setResourcesDropdownOpen, resourcesTimeoutRef)}
             role="menu"
             aria-orientation="vertical"
             tabIndex={0}

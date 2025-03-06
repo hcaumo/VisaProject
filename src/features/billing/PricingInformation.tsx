@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 
 import { PricingCard } from '@/features/billing/PricingCard';
@@ -36,7 +38,7 @@ export const PricingInformation = (props: {
           )}
 
           {plan.features.translationService && (
-            <PricingFeature>{t('feature_translation')}</PricingFeature>
+            <PricingFeature>{t('feature_transfer')}</PricingFeature>
           )}
 
           {plan.features.supportService && (

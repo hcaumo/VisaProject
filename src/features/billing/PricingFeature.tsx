@@ -1,3 +1,5 @@
+'use client';
+
 export const PricingFeature = (props: { children: React.ReactNode }) => (
   <li className="flex items-center text-muted-foreground">
     <svg
