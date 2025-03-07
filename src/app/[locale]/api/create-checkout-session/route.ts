@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { locale?: string[] } }
+) {
   try {
     console.log('Received request to create payment link');
-    
+    console.log('Locale parameters:', params.locale);
+
     const body = await request.json();
     const { amount, currency, description, applicationId, successUrl, cancelUrl } = body;
     

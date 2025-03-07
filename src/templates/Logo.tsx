@@ -9,17 +9,8 @@ import { AppConfig } from '@/utils/AppConfig';
 export const Logo = (props: {
   isTextHidden?: boolean;
 }) => {
-  const { resolvedTheme } = useTheme();
-  const [logoSrc, setLogoSrc] = useState('/assets/images/drexfy/logo-black.png');
-  
-  // Update logo based on theme
-  useEffect(() => {
-    if (resolvedTheme === 'dark') {
-      setLogoSrc('/assets/images/drexfy/logo-white.png');
-    } else {
-      setLogoSrc('/assets/images/drexfy/logo-black.png');
-    }
-  }, [resolvedTheme]);
+  // Force light theme logo regardless of system preference
+  const [logoSrc] = useState('/assets/images/drexfy/logo-black.png');
 
   return (
     <div className="flex items-center text-xl font-semibold">
