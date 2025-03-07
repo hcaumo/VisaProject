@@ -1,8 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { AppConfig } from '@/utils/AppConfig';
 
